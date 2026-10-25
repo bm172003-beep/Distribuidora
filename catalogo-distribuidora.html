@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script>
+  // Evita el "salto" al recargar (F5): el navegador por defecto intenta
+  // devolverte a donde estabas antes de refrescar. Se desactiva eso y se
+  // fuerza el inicio de la página apenas se puede, antes de que se vea nada.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+<meta name="theme-color" content="#0f1b2d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+CjxyZWN0IHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgcng9JzE1JyBmaWxsPSd1cmwoI2cpJy8+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0nZycgeDE9JzAnIHkxPScwJyB4Mj0nNjQnIHkyPSc2NCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnPgo8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyNDUxZTAnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNDMwOWUnLz4KPC9saW5lYXJHcmFkaWVudD48L2RlZnM+Cjx0ZXh0IHg9JzMyJyB5PSc0MycgZm9udC1mYW1pbHk9J0FyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMjcnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyNmZmZmZmYnIHRleHQtYW5jaG9yPSdtaWRkbGUnPk1NPC90ZXh0Pgo8L3N2Zz4K">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+CjxyZWN0IHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgcng9JzE1JyBmaWxsPSd1cmwoI2cpJy8+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0nZycgeDE9JzAnIHkxPScwJyB4Mj0nNjQnIHkyPSc2NCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnPgo8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyNDUxZTAnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNDMwOWUnLz4KPC9saW5lYXJHcmFkaWVudD48L2RlZnM+Cjx0ZXh0IHg9JzMyJyB5PSc0MycgZm9udC1mYW1pbHk9J0FyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMjcnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyNmZmZmZmYnIHRleHQtYW5jaG9yPSdtaWRkbGUnPk1NPC90ZXh0Pgo8L3N2Zz4K">
+<title>Distribuidora Medina &amp; Medel | Envío Gratis a Todo Chile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Adelanta la conexión con Firebase/Firestore para que los productos empiecen a llegar antes -->
+<link rel="preconnect" href="https://firestore.googleapis.com">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com">
+<link rel="modulepreload" href="./productsMockData.js">
+<link rel="modulepreload" href="./firebaseMedinaMedel.js">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1b2d;
+    --white: #ffffff;
+    --bg-light: #f5f7fa;
+    --gray-mid: #e3e7ee;
+    --gray-dark: #33404f;
+    --gray-text: #667085;
+    --brand: #1d4ed8;
+    --brand-dark: #14309e;
+    --brand-soft: #e8edfd;
+    --accent: #f97316;
+    --accent-soft: #fff1e6;
+    --wa: #22c55e;
+    --wa-dark: #17a34a;
+    --ship: #0ea472;
+    --ship-soft: #e2f7ee;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+    --ease-lux: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  /* scroll-behavior en 'auto': el desplazamiento suave/lento lo controla el JS */
+  html { overflow-x: hidden; scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
+  body { background: var(--white); color: var(--navy); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body.no-scroll { overflow: hidden; position: fixed; width: 100%; }
+  button, a, input { touch-action: manipulation; font-family: inherit; }
+  img { display: block; max-width: 100%; }
+  #nosotros, #catalogo, #categorias { scroll-margin-top: 120px; }
+  h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+
+  /* ===== Barra de anuncio — ENVÍO GRATIS protagonista ===== */
+  .announce-bar { position: fixed; top: 0; width: 100%; z-index: 1001; background: linear-gradient(90deg, #0ea472, #12b981 55%, #0ea472); color: var(--white); text-align: center; font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; padding: 9px 16px; padding-top: calc(9px + var(--sat)); }
+  .announce-bar strong { font-weight: 800; }
+  .announce-bar .soft { font-weight: 400; opacity: 0.86; }
+
+  /* ===== Navbar ===== */
+  nav { position: fixed; top: calc(36px + var(--sat)); width: 100%; z-index: 1000; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s var(--ease-lux); background: rgba(255,255,255,0); }
+  nav.scrolled { background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 12px rgba(15,27,45,0.08); padding: 12px 40px; }
+  .brand-lockup { display: flex; align-items: center; gap: 10px; min-width: 0; background: none; border: none; padding: 0; margin: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; border-radius: 8px; }
+  .brand-lockup:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  nav h1 { font-weight: 600; font-size: 16px; letter-spacing: 0.01em; color: var(--white); transition: color 0.4s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  nav.scrolled h1 { color: var(--navy); }
+  .nav-cta { display: none; }
+  @media (min-width: 760px) {
+    .nav-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--wa); color: var(--white); text-decoration: none; padding: 10px 20px; border-radius: 30px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; transition: transform 0.3s ease, background 0.3s ease; white-space: nowrap; }
+    .nav-cta:hover { background: var(--wa-dark); transform: translateY(-1px); }
+  }
+
+  /* ===== Hero ===== */
+  .hero { margin-top: calc(36px + var(--sat)); min-height: 90svh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; background: radial-gradient(circle at 20% 15%, #1b3358 0%, var(--navy) 55%, #0a1220 100%); }
+  .hero::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 26px 26px; opacity:0.5; }
+  .hero-content { position: relative; z-index: 3; color: var(--white); max-width: 780px; padding: 118px 24px 60px; opacity: 0; animation: fadeUp 0.9s ease forwards; }
+  .hero-kicker { display: inline-flex; align-items:center; gap:8px; background: rgba(18,185,129,0.16); border: 1px solid rgba(18,185,129,0.45); color: #7ff0c4; padding: 9px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 24px; text-transform: uppercase; }
+  .hero h2 { font-weight: 600; font-size: clamp(29px, 6vw, 50px); margin-bottom: 18px; line-height: 1.18; }
+  .hero h2 em { font-style: normal; color: #7ff0c4; }
+  .hero p { font-size: clamp(14px, 2.4vw, 16px); font-weight: 300; line-height: 1.7; margin: 0 auto 32px; max-width: 580px; color: #cfd8e6; }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s ease 0.2s forwards; }
+  .hero-btn { display: inline-flex; align-items:center; justify-content:center; gap:8px; padding: 16px 32px; background: var(--white); border: 1px solid var(--white); color: var(--navy); text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; border-radius: 40px; transition: all 0.35s var(--ease-lux); min-height: 50px; cursor: pointer; }
+  .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.28); }
+  .hero-btn:active { transform: scale(0.97); }
+  .hero-btn.ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.45); }
+  .hero-btn.ghost:hover { background: rgba(255,255,255,0.12); }
+  .hero-badges { display:flex; gap: 20px; justify-content:center; flex-wrap:wrap; margin-top: 42px; opacity: 0; animation: fadeUp 0.9s ease 0.4s forwards; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; font-size: 12px; color:#cfd8e6; }
+  .hero-badge.is-ship { background: rgba(18,185,129,0.14); border: 1px solid rgba(18,185,129,0.4); color: #a9f5d6; font-weight: 700; padding: 8px 16px; border-radius: 30px; }
+  .hero-badge .ico { font-size: 16px; }
+  .hero-scroll-hint { position: absolute; bottom: calc(22px + var(--sab)); left: 50%; transform: translateX(-50%); z-index: 3; color: rgba(255,255,255,0.5); font-size: 22px; animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
+
+  /* ===== Pantalla de carga inicial ===== */
+  #page-loader { position: fixed; inset: 0; z-index: 5000; background: radial-gradient(circle at 30% 20%, #1b3358 0%, var(--navy) 60%, #0a1220 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 0.55s ease, visibility 0.55s ease; }
+  #page-loader .pl-mark { width: 62px; height: 62px; border-radius: 16px; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 23px; box-shadow: 0 14px 34px rgba(29,78,216,0.5); animation: plPulse 1.15s ease-in-out infinite; }
+  #page-loader .pl-text { color: #b9c6db; font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 600; }
+  #page-loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  @keyframes plPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  body.is-loading { overflow: hidden; }
+  @media (prefers-reduced-motion: reduce) { #page-loader .pl-mark { animation: none; } }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== Sobre Nosotros ===== */
+  .about-section { max-width: 1200px; margin: 0 auto; padding: 96px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .about-media { background: linear-gradient(135deg, var(--brand-soft), var(--bg-light)); border-radius: 20px; padding: 42px 32px; display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .about-stat { background: var(--white); border-radius: 14px; padding: 20px 16px; box-shadow: 0 12px 30px rgba(15,27,45,0.06); }
+  .about-stat .num { font-family:'Poppins', sans-serif; font-weight:700; font-size: 24px; color: var(--brand-dark); }
+  .about-stat.ship .num { color: var(--ship); }
+  .about-stat .lbl { font-size: 11.5px; color: var(--gray-text); margin-top:4px; line-height:1.45; }
+  .about-text .kicker { display:block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand); margin-bottom: 14px; font-weight: 700; }
+  .about-text h2 { font-weight: 600; font-size: clamp(25px, 3.4vw, 36px); line-height: 1.25; margin-bottom: 20px; }
+  .about-text p { font-size: 14.5px; color: var(--gray-text); line-height: 1.85; margin-bottom: 14px; max-width: 500px; }
+  .steps { display: grid; gap: 10px; margin-top: 20px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; color: var(--gray-dark); line-height: 1.6; }
+  .step .n { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-dark); font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+  @media (max-width: 860px) { .about-section { grid-template-columns: 1fr; gap: 34px; padding: 64px 20px; } }
+
+  /* ===== Categorías ===== */
+  .cats-section { max-width: 1300px; margin: 0 auto; padding: 16px 24px 84px; }
+  .showcase-head { text-align: center; max-width: 620px; margin: 0 auto 40px; }
+  .showcase-kicker { display: block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand); margin-bottom: 12px; font-weight: 700; }
+  .showcase-head h2 { font-weight: 600; font-size: clamp(25px, 4vw, 34px); margin-bottom: 12px; }
+  .showcase-head p { font-size: 14px; color: var(--gray-text); line-height: 1.75; }
+
+  .tiles-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .tile { position: relative; border: 1px solid var(--gray-mid); cursor: pointer; overflow: hidden; border-radius: 16px; display: flex; flex-direction: column; gap: 9px; align-items: flex-start; padding: 24px 20px; text-align: left; background: var(--white); transition: transform 0.4s var(--ease-lux), box-shadow 0.4s ease, border-color .3s ease; }
+  .tile .tile-ico { width: 46px; height: 46px; border-radius: 12px; display:flex; align-items:center; justify-content:center; font-size: 22px; background: var(--brand-soft); }
+  .tile-name { font-weight: 600; font-size: 14.5px; color: var(--navy); line-height:1.3; }
+  .tile-cta { font-size: 11.5px; color: var(--brand); font-weight: 600; }
+  .tile:hover { transform: translateY(-4px); box-shadow: 0 18px 34px rgba(15,27,45,0.1); border-color: var(--brand); }
+  .tile:active { transform: scale(0.98); }
+  @media (max-width: 900px) { .tiles-grid { grid-template-columns: repeat(2, 1fr); } .tile { padding: 18px 15px; } }
+
+  /* ===== Catálogo ===== */
+  .collection { max-width: 1400px; margin: 0 auto; padding: 26px 24px 96px; }
+  .collection-head { text-align:center; margin-bottom: 26px; }
+  .collection-head h2 { font-weight: 600; font-size: clamp(25px, 4vw, 34px); margin-bottom: 8px; }
+  .results-count { font-size: 12.5px; color: var(--gray-text); }
+  .results-count strong { color: var(--navy); font-weight: 600; }
+
+  .filter-pills { display: flex; gap: 9px; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 20px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .filter-pills::-webkit-scrollbar { display: none; }
+  @media (min-width: 860px) { .filter-pills { flex-wrap: wrap; justify-content: center; margin-bottom: 36px; overflow: visible; } }
+
+  .catalog-search { position: relative; max-width: 420px; margin: 0 auto 22px; }
+  .catalog-search input { width: 100%; padding: 13px 42px 13px 44px; border: 1.5px solid var(--gray-mid); border-radius: 30px; font-size: 16px; font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); transition: border-color .2s ease, box-shadow .2s ease; }
+  .catalog-search input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-soft); }
+  .catalog-search .cs-ico { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 15px; opacity: .55; pointer-events: none; }
+  .catalog-search .cs-clear { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--bg-light); color: var(--gray-text); font-size: 15px; cursor: pointer; display: none; align-items: center; justify-content: center; }
+  .catalog-search.has-text .cs-clear { display: flex; }
+
+  .load-more-wrap { text-align: center; margin: 30px 0 6px; }
+  .load-more-btn { background: var(--white); border: 1.5px solid var(--navy); color: var(--navy); padding: 14px 30px; border-radius: 40px; font-size: 13px; font-weight: 700; cursor: pointer; min-height: 48px; transition: all .25s ease; }
+  .load-more-btn:hover { background: var(--navy); color: var(--white); }
+  .load-more-hint { font-size: 11.5px; color: var(--gray-text); margin-top: 8px; }
+  .filter-pill { border: 1px solid var(--gray-mid); background: var(--white); color: var(--gray-dark); padding: 11px 19px; border-radius: 30px; font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 0.25s ease; min-height: 42px; white-space: nowrap; flex-shrink: 0; }
+  .filter-pill:hover { border-color: var(--brand); color: var(--brand); }
+  .filter-pill.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 26px; }
+
+  .card { display: flex; flex-direction: column; height: 100%; border: 1px solid var(--gray-mid); border-radius: 18px; overflow: hidden; background: var(--white); transition: transform 0.4s var(--ease-lux), box-shadow 0.4s ease; opacity: 0; animation: fadeUp 0.7s var(--ease-lux) forwards; }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(15,27,45,0.1); }
+
+  /* ---- Media / galería de la tarjeta ---- */
+  .card-media { position: relative; aspect-ratio: 1 / 1; display:flex; align-items:center; justify-content:center; background: var(--bg-light); cursor: pointer; overflow: hidden; }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-lux); }
+  .card:hover .card-media img { transform: scale(1.04); }
+  .card-media .media-ico { font-size: 46px; filter: drop-shadow(0 6px 10px rgba(15,27,45,0.12)); }
+  .card-media.is-placeholder { background: linear-gradient(135deg, var(--brand-soft), var(--bg-light)); }
+  .card-cat-tag { position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.95); padding: 5px 11px; font-size: 9.5px; font-weight: 700; color: var(--navy); border-radius: 20px; box-shadow: 0 4px 12px rgba(15,27,45,0.12); text-transform: uppercase; letter-spacing: 0.04em; }
+  .photo-count { position: absolute; bottom: 12px; right: 12px; background: rgba(15,27,45,0.72); color: #fff; font-size: 10.5px; font-weight: 600; padding: 4px 9px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; backdrop-filter: blur(4px); }
+  .free-chip { position: absolute; top: 12px; right: 12px; background: var(--ship); color: #fff; font-size: 9.5px; font-weight: 800; padding: 5px 10px; border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 12px rgba(14,164,114,0.35); }
+
+  .card-body { padding: 18px 18px 20px; display: flex; flex-direction: column; flex: 1; gap: 9px; }
+  .card-title { font-family:'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: var(--navy); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .card-excerpt { font-size: 12px; color: var(--gray-text); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-more { align-self: flex-start; background: none; border: none; color: var(--brand); font-size: 11.5px; font-weight: 700; cursor: pointer; padding: 0; }
+
+  /* Selector de packs */
+  .pack-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+  .pack-opt { position: relative; border: 1.5px solid var(--gray-mid); background: var(--white); border-radius: 10px; padding: 9px 3px 7px; cursor: pointer; text-align: center; transition: all 0.2s ease; min-height: 46px; }
+  .pack-opt .po-label { display: block; font-size: 9.5px; font-weight: 700; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 0.01em; }
+  .pack-opt .po-price { display: block; font-size: 11.5px; font-weight: 700; color: var(--navy); margin-top: 3px; white-space: nowrap; }
+  .pack-opt.selected { border-color: var(--brand); background: var(--brand-soft); }
+  .pack-opt.selected .po-label, .pack-opt.selected .po-price { color: var(--brand-dark); }
+  .pack-opt .po-badge { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--white); font-size: 7.5px; font-weight: 800; padding: 2px 6px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.02em; }
+
+  .card-price-line { display:flex; align-items: baseline; justify-content:space-between; gap: 8px; margin-top: 6px; }
+  .card-price-line .cp-total { font-family:'Poppins', sans-serif; font-size: 21px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .card-price-line .cp-note { font-size: 10.5px; color: var(--gray-text); text-align:right; line-height:1.35; }
+  .ship-line { display: inline-flex; align-items: center; gap: 6px; background: var(--ship-soft); color: #07714f; font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 8px; align-self: flex-start; }
+
+  .btn-wa { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: var(--wa); border: none; color: var(--white); text-align: center; text-decoration: none; padding: 13px 0; font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; border-radius: 12px; transition: all 0.3s ease; min-height: 48px; margin-top: auto; cursor: pointer; }
+  .btn-wa:hover { background: var(--wa-dark); }
+  .btn-wa:active { transform: scale(0.98); }
+  .btn-wa svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .btn-wa-sub { text-align:center; font-size: 10px; color: var(--gray-text); margin-top: 4px; line-height: 1.4; }
+  .btn-wa-sub.is-advance { color: #9a3412; font-weight: 600; }
+
+  /* ===== Bloque mayorista (12+ unidades) ===== */
+  .mayor-band { max-width: 1400px; margin: 34px auto 0; padding: 0 24px; }
+  .mayor-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; background: linear-gradient(120deg, #101f36, #1b3358); color: var(--white); border-radius: 18px; padding: 28px 30px; }
+  .mayor-inner h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .mayor-inner p { font-size: 13.5px; color: #c3cfe0; line-height: 1.65; max-width: 620px; }
+  .mayor-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--white); color: var(--navy); text-decoration: none; font-size: 13px; font-weight: 700; padding: 14px 24px; border-radius: 40px; white-space: nowrap; transition: transform .3s var(--ease-lux), box-shadow .3s ease; min-height: 48px; }
+  .mayor-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.28); }
+  @media (max-width: 760px) { .mayor-band { padding: 0 14px; } .mayor-inner { padding: 22px 18px; } .mayor-btn { width: 100%; } }
+
+  .qv-mayor { display: block; text-align: center; margin-top: 10px; padding: 11px 12px; border: 1px dashed var(--gray-mid); border-radius: 11px; background: var(--bg-light); color: var(--navy); text-decoration: none; font-size: 11.8px; line-height: 1.5; font-weight: 600; }
+  .qv-mayor b { color: var(--brand-dark); display: block; font-size: 12.5px; margin-bottom: 2px; }
+  .qv-mayor:hover { border-color: var(--brand); }
+
+  .empty-state { grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: var(--gray-text); }
+  .empty-state h3 { font-weight: 600; color: var(--navy); margin-bottom: 12px; font-size: 22px; }
+  .empty-state button { margin-top: 18px; background: var(--navy); color: var(--white); border: none; padding: 13px 30px; font-size: 12px; font-weight: 600; border-radius: 30px; cursor: pointer; }
+  .skeleton { border-radius: 18px; border: 1px solid var(--gray-mid); overflow: hidden; }
+  .skeleton .sk-media { aspect-ratio: 1/1; background: linear-gradient(100deg, #eef1f6 30%, #f8fafc 50%, #eef1f6 70%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  .skeleton .sk-line { height: 12px; margin: 14px 16px; border-radius: 6px; background: #eef1f6; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* ===== Quick View / Ficha de producto ===== */
+  .quickview-overlay { position: fixed; inset: 0; background: rgba(15,27,45,0.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
+  .quickview-overlay.active { opacity: 1; pointer-events: auto; }
+  .quickview-panel { background: var(--white); max-width: 1000px; width: 100%; max-height: 90svh; display: grid; grid-template-columns: 1.05fr 1fr; grid-template-rows: minmax(0, 1fr); align-items: stretch; border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.35); transform: scale(0.94) translateY(12px); opacity: 0; transition: transform 0.5s var(--ease-lux), opacity 0.35s ease; }
+  .quickview-overlay.active .quickview-panel { transform: scale(1) translateY(0); opacity: 1; }
+  .qv-close { position: absolute; top: 14px; right: 14px; z-index: 12; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.96); font-size: 17px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.16); }
+
+  /* ---- Galería estilo Marketplace ---- */
+  .qv-gallery { background: var(--bg-light); display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
+  .gal-stage { position: relative; flex: 1 1 auto; min-height: 220px; background: var(--bg-light); overflow: hidden; }
+  .gal-track { display: flex; height: 100%; width: 100%; transition: transform 0.45s var(--ease-lux); will-change: transform; }
+  .gal-track.dragging { transition: none; }
+  .gal-slide { flex: 0 0 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .gal-slide img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+  .gal-slide .media-ico { font-size: 84px; }
+  .gal-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: var(--navy); font-size: 17px; cursor: pointer; z-index: 5; box-shadow: 0 4px 14px rgba(0,0,0,0.22); display: none; align-items: center; justify-content: center; }
+  .gal-arrow.prev { left: 12px; } .gal-arrow.next { right: 12px; }
+  .gal-stage.multi .gal-arrow { display: flex; }
+  .gal-counter { position: absolute; top: 14px; left: 14px; z-index: 5; background: rgba(15,27,45,0.66); color: #fff; font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 20px; }
+  .gal-dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; z-index: 5; }
+  .gal-dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(15,27,45,0.25); transition: all 0.25s ease; }
+  .gal-dots span.on { background: var(--navy); width: 18px; border-radius: 6px; }
+  .gal-thumbs { flex: 0 0 auto; display: flex; gap: 8px; padding: 10px; overflow-x: auto; background: #eef1f6; border-top: 1px solid var(--gray-mid); scrollbar-width: none; }
+  .gal-thumbs::-webkit-scrollbar { display: none; }
+  .gal-thumbs button { flex: 0 0 60px; height: 60px; border-radius: 9px; overflow: hidden; border: 2px solid transparent; background: #fff; padding: 0; cursor: pointer; opacity: 0.6; transition: all 0.25s ease; }
+  .gal-thumbs button.on { border-color: var(--brand); opacity: 1; }
+  .gal-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Todo el panel derecho (título, descripción, packs y botón de compra) es
+     UN SOLO contenedor con scroll. Antes había dos scrolls anidados (uno para
+     la descripción y otro reservado para el pie con el botón), y el pie —al
+     ser más alto que el hueco que le quedaba— dejaba casi 0px de espacio
+     visible para la descripción en Android. Con un único scroll, todo el
+     contenido es siempre alcanzable simplemente bajando. */
+  .qv-panel-right { display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .qv-info { padding: 34px 34px 6px; display: flex; flex-direction: column; gap: 12px; flex: 0 0 auto; }
+  .qv-tag { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); font-weight: 700; }
+  .qv-info h3 { font-weight: 600; font-size: clamp(19px, 2.6vw, 25px); line-height: 1.3; }
+  .qv-ship-banner { display: flex; align-items: center; gap: 10px; background: var(--ship-soft); border: 1px solid #b9ecd8; border-radius: 12px; padding: 11px 14px; }
+  .qv-ship-banner .ico { font-size: 20px; }
+  .qv-ship-banner b { display: block; font-size: 13px; color: #07714f; }
+  .qv-ship-banner small { font-size: 11.5px; color: #2f8a6c; }
+
+  /* ---- Descripción larga formateada ---- */
+  .qv-desc { flex: 0 0 auto; font-size: 13.5px; color: var(--gray-dark); line-height: 1.68; }
+  .qv-desc .d-p { margin-bottom: 9px; }
+  .qv-desc .d-head { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); margin: 14px 0 7px; letter-spacing: 0.01em; }
+  .qv-desc .d-check { position: relative; padding-left: 24px; margin-bottom: 6px; }
+  .qv-desc .d-check::before { content: '✓'; position: absolute; left: 0; top: 0; width: 17px; height: 17px; border-radius: 50%; background: var(--ship-soft); color: var(--ship); font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .qv-desc .d-bullet { position: relative; padding-left: 16px; margin-bottom: 5px; }
+  .qv-desc .d-bullet::before { content: ''; position: absolute; left: 4px; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--brand); }
+  .qv-desc .d-sp { height: 6px; }
+  .qv-desc.clamped { max-height: 220px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent); mask-image: linear-gradient(180deg, #000 60%, transparent); }
+  .desc-toggle { flex: 0 0 auto; align-self: flex-start; background: none; border: none; color: var(--brand); font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 2px 0; }
+
+  .qv-foot { flex: 0 0 auto; padding: 14px 34px calc(28px + var(--sab)); border-top: 1px solid var(--gray-mid); background: var(--white); margin-top: 6px; }
+  .qv-payment-note { font-size: 11.5px; color: var(--gray-text); text-align: center; margin-top: 8px; line-height: 1.5; }
+
+  /* ===== Franja de confianza ===== */
+  .trust-strip { background: var(--bg-light); padding: 58px 24px; }
+  .trust-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; text-align:center; }
+  .trust-item { background: var(--white); border-radius: 16px; padding: 26px 20px; border: 1px solid var(--gray-mid); }
+  .trust-item.hl { border-color: #b9ecd8; background: var(--ship-soft); }
+  .trust-item h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
+  .trust-item p { font-size: 12.5px; color: var(--gray-text); line-height: 1.6; }
+  .trust-item.hl p { color: #2f8a6c; }
+  .trust-item .ico { font-size: 26px; margin-bottom: 10px; }
+  @media (max-width: 700px) { .trust-grid { grid-template-columns: 1fr; gap: 14px; } }
+
+  /* ===== Footer ===== */
+  footer { background: var(--navy); color: var(--white); padding: 70px 40px calc(46px + var(--sab)); }
+  .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 26px; }
+  .footer-col h4 { font-weight: 600; font-size: 15.5px; margin-bottom: 14px; }
+  .footer-col p, .footer-col a { font-size: 13px; color: #b6c0cf; line-height: 1.8; margin-bottom: 6px; text-decoration: none; display:block; }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { text-align: center; font-size: 11px; color: #7f8ea3; letter-spacing: 0.04em; }
+
+  /* WhatsApp flotante */
+  .wa-float { position: fixed; right: calc(18px + var(--sar)); bottom: calc(18px + var(--sab)); z-index: 900; display:flex; align-items:center; gap:10px; background: var(--wa); color: var(--white); padding: 14px 20px 14px 14px; border-radius: 40px; text-decoration: none; box-shadow: 0 10px 26px rgba(34,197,94,0.35); transition: transform 0.3s ease, opacity 0.3s ease; }
+  .wa-float svg { width: 26px; height: 26px; flex-shrink:0; }
+  .wa-float span { font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .wa-float:hover { transform: scale(1.04); }
+  @media (max-width: 640px) { .wa-float span { display:none; } .wa-float { padding: 14px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ================= MÓVIL (iOS + Android) ================= */
+  @media (max-width: 860px) {
+    .announce-bar { font-size: 11px; padding: 8px 12px; padding-top: calc(8px + var(--sat)); }
+    nav { padding: 13px 16px; top: calc(32px + var(--sat)); }
+    nav.scrolled { padding: 10px 16px; }
+    nav h1 { font-size: 13.5px; max-width: 62vw; }
+    .hero { margin-top: calc(32px + var(--sat)); min-height: 88svh; }
+    .hero-content { padding: 92px 18px 60px; }
+    .hero-actions { flex-direction: column; width: 100%; max-width: 320px; margin: 0 auto; }
+    .hero-btn { width: 100%; }
+    .hero-badges { gap: 10px; margin-top: 30px; }
+    .about-media { grid-template-columns: 1fr 1fr; padding: 22px 16px; }
+    .collection { padding: 20px 14px 80px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card-body { padding: 12px 12px 14px; gap: 7px; }
+    .card-title { font-size: 12.5px; }
+    .card-excerpt, .card-more { display: none; }
+    .btn-wa-sub { font-size: 9px; }
+    .pack-opt { padding: 7px 2px 6px; min-height: 42px; }
+    .pack-opt .po-label { font-size: 8px; }
+    .pack-opt .po-price { font-size: 9.5px; }
+    .pack-opt .po-badge { font-size: 6.5px; padding: 2px 4px; top: -7px; }
+    .card-price-line .cp-total { font-size: 16.5px; }
+    .card-price-line .cp-note { display:none; }
+    .ship-line { font-size: 9.5px; padding: 4px 7px; gap: 4px; }
+    .btn-wa { font-size: 11px; padding: 11px 0; min-height: 44px; }
+    .free-chip { font-size: 8px; padding: 4px 7px; top: 9px; right: 9px; }
+    .card-cat-tag { font-size: 8px; padding: 4px 8px; top: 9px; left: 9px; }
+    .photo-count { font-size: 9.5px; padding: 3px 7px; bottom: 9px; right: 9px; }
+
+    /* Ficha de producto como hoja inferior (bottom sheet) */
+    .quickview-overlay { padding: 0; align-items: flex-end; }
+    .quickview-panel { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); max-height: 94svh; height: 94svh; border-radius: 20px 20px 0 0; transform: translateY(100%); opacity: 1; transition: transform 0.45s var(--ease-lux); }
+    .quickview-overlay.active .quickview-panel { transform: translateY(0); }
+    .gal-stage { min-height: 0; height: 36svh; }
+    .qv-gallery { max-height: 44svh; }
+    .gal-thumbs button { flex: 0 0 48px; height: 48px; }
+    .qv-panel-right { min-height: 0; }
+    .qv-info { padding: 16px 18px 4px; gap: 10px; }
+    .qv-info h3 { font-size: 18.5px; }
+    .qv-desc { font-size: 13px; }
+    .qv-close { width: 36px; height: 36px; top: 10px; right: 10px; }
+    .wa-float { display: none; }
+
+    /* El pie de compra (packs + botón WhatsApp) fluye dentro del mismo scroll
+       que la descripción — ya no es una franja fija aparte. Esto es lo que
+       soluciona el bug de Android donde solo se alcanzaba a ver una franja
+       y no se podía seguir bajando para leer la descripción completa. */
+    .qv-foot { padding: 10px 16px calc(16px + var(--sab)); }
+  }
+  @media (max-width: 360px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body class="is-loading">
+
+  <div id="page-loader" aria-hidden="true">
+    <div class="pl-mark">MM</div>
+    <div class="pl-text">Cargando catálogo…</div>
+  </div>
+
+
+  <div class="announce-bar" id="announce-bar">
+    🚚 <strong>ENVÍO GRATIS a todo Chile</strong> <span class="soft">· pago contra entrega en pedidos de 1 unidad</span>
+  </div>
+
+  <nav id="navbar">
+    <button type="button" class="brand-lockup" id="brand-home" aria-label="Ir al inicio">
+      <div class="brand-mark">MM</div>
+      <h1>Distribuidora Medina &amp; Medel</h1>
+    </button>
+    <a href="#" id="nav-wa-cta" class="nav-cta" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <span class="hero-kicker">🚚 Envío Gratis a Todo Chile</span>
+      <h2>Hogar, cuidado personal y bienestar<br><em>con despacho sin costo</em></h2>
+      <p>Productos útiles para tu casa y tu día a día. El envío va incluido en el precio que ves: sin costos escondidos y sin sorpresas al final.</p>
+      <div class="hero-actions">
+        <a href="#catalogo" class="hero-btn">Ver Catálogo</a>
+        <a href="#nosotros" class="hero-btn ghost">Cómo Funciona</a>
+      </div>
+      <div class="hero-badges">
+        <span class="hero-badge is-ship"><span class="ico">🚚</span> Envío gratis a todo Chile</span>
+        <span class="hero-badge"><span class="ico">💵</span> Pagas al recibir (1 unidad)</span>
+        <span class="hero-badge"><span class="ico">📦</span> Packs con descuento</span>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">⌄</div>
+  </header>
+
+  <!-- Sobre Nosotros / Cómo funciona -->
+  <section class="about-section" id="nosotros">
+    <div class="about-media">
+      <div class="about-stat ship"><div class="num">$0</div><div class="lbl">Costo de envío: el despacho va incluido</div></div>
+      <div class="about-stat"><div class="num">100%</div><div class="lbl">Chile, despacho a domicilio</div></div>
+      <div class="about-stat"><div class="num">4</div><div class="lbl">Categorías de productos</div></div>
+      <div class="about-stat"><div class="num">1-6</div><div class="lbl">Unidades por pedido, con precio mayorista</div></div>
+    </div>
+    <div class="about-text">
+      <span class="kicker">Cómo Funciona</span>
+      <h2>Simple, directo y con envío incluido</h2>
+      <p>En Distribuidora Medina &amp; Medel elegimos productos prácticos para el hogar, el cuidado personal y el bienestar diario. Armamos packs pensando tanto en quien compra para su casa como en quien revende.</p>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><span>Eliges el producto y la cantidad (1 unidad, pack de 2 o media docena a precio mayorista).</span></div>
+        <div class="step"><span class="n">2</span><span>Nos escribes por WhatsApp y coordinamos la entrega en tu comuna. <b>El envío no tiene costo extra.</b></span></div>
+        <div class="step"><span class="n">3</span><span>En pedidos de <b>1 unidad</b> pagas al recibir, en efectivo o por transferencia. En <b>pedidos por pack</b> se coordina un abono o el pago completo antes del despacho.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categorías -->
+  <section class="cats-section" id="categorias">
+    <div class="showcase-head">
+      <span class="showcase-kicker">Nuestras Líneas</span>
+      <h2>Categorías</h2>
+      <p>Filtra el catálogo por lo que estás buscando, o revisa todo lo disponible.</p>
+    </div>
+    <div class="tiles-grid" id="cat-tiles"></div>
+  </section>
+
+  <!-- Catálogo -->
+  <section class="collection" id="catalogo">
+    <div class="collection-head">
+      <h2>Catálogo</h2>
+      <div class="results-count" id="results-count">Cargando productos…</div>
+    </div>
+    <div class="catalog-search" id="catalog-search">
+      <span class="cs-ico">🔍</span>
+      <input type="text" id="search-input" placeholder="Buscar producto (ej: magnesio, sartén, tónico)...">
+      <button type="button" class="cs-clear" id="search-clear" aria-label="Borrar búsqueda">&times;</button>
+    </div>
+    <div class="filter-pills" id="filter-pills"></div>
+    <div class="grid" id="catalog-grid"></div>
+    <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+      <button class="load-more-btn" id="load-more-btn">Ver más productos</button>
+      <div class="load-more-hint" id="load-more-hint"></div>
+    </div>
+
+    <div class="mayor-band">
+      <div class="mayor-inner">
+        <div>
+          <h3>🏷️ ¿Compras por mayor sobre 12 unidades?</h3>
+          <p>Cotiza directo con un asesor comercial para tarifas especiales de distribución. Atendemos talleres, almacenes y revendedores con precios por volumen fuera de catálogo.</p>
+        </div>
+        <a href="#" id="mayor-cta" class="mayor-btn" target="_blank" rel="noopener">Cotizar con un asesor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Franja de confianza -->
+  <section class="trust-strip">
+    <div class="trust-grid">
+      <div class="trust-item hl"><div class="ico">🚚</div><h4>Envío Gratis a Todo Chile</h4><p>El despacho a domicilio va incluido en el precio publicado. Sin costo extra por región.</p></div>
+      <div class="trust-item"><div class="ico">💵</div><h4>Pago Contra Entrega (1 unidad)</h4><p>En pedidos de 1 unidad pagas al repartidor. En pedidos por pack se coordina abono o pago completo antes del despacho.</p></div>
+      <div class="trust-item"><div class="ico">📦</div><h4>Precios por Volumen</h4><p>Packs de 2 y media docena con tarifas especiales para reventa.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Distribuidora Medina &amp; Medel</h4>
+        <p>Menaje para el hogar, cuidado personal y suplementos, con envío gratis a todo Chile.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Despacho y Pago</h4>
+        <p>🚚 Envío gratis a todo Chile.</p>
+        <p>💵 Pago contra entrega en pedidos de 1 unidad.</p>
+        <p>💳 Packs y mayoristas: abono o pago previo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="#" id="footer-wa-link" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+        <a href="#" id="footer-email-link">Escríbenos por correo</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Distribuidora Medina &amp; Medel. Todos los derechos reservados.</div>
+  </footer>
+
+  <a class="wa-float" id="wa-float" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.06 4c-4.86 0-8.82 3.94-8.82 8.8 0 1.55.41 3.06 1.19 4.4L3.2 21l3.9-1.02a8.83 8.83 0 0 0 4.94 1.5h.01c4.85 0 8.81-3.94 8.81-8.8a8.72 8.72 0 0 0-2.26-6.36ZM12.06 19.7a7.3 7.3 0 0 1-3.73-1.02l-.27-.16-2.78.73.74-2.7-.18-.28a7.32 7.32 0 0 1-1.12-3.9 7.35 7.35 0 0 1 7.35-7.34c1.96 0 3.8.77 5.18 2.15a7.29 7.29 0 0 1 2.15 5.19c0 4.05-3.3 7.33-7.34 7.33Zm4.02-5.5c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.17-.48.06-.22-.11-.93-.34-1.77-1.09-.65-.58-1.1-1.3-1.22-1.52-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.2-.68-1.65-.18-.43-.36-.37-.5-.38h-.43c-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.87 0 1.1.81 2.16.92 2.31.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.43-.06 1.3-.53 1.49-1.04.18-.51.18-.95.13-1.04-.06-.1-.2-.16-.42-.27Z"/></svg>
+    <span>Pedir por WhatsApp</span>
+  </a>
+
+  <!-- Ficha de producto -->
+  <div class="quickview-overlay" id="qv-overlay" role="dialog" aria-modal="true">
+    <div class="quickview-panel" id="qv-panel">
+      <button class="qv-close" id="qv-close" aria-label="Cerrar">&times;</button>
+
+      <div class="qv-gallery">
+        <div class="gal-stage" id="gal-stage">
+          <div class="gal-track" id="gal-track"></div>
+          <span class="gal-counter" id="gal-counter"></span>
+          <button class="gal-arrow prev" id="gal-prev" aria-label="Foto anterior">&#10094;</button>
+          <button class="gal-arrow next" id="gal-next" aria-label="Foto siguiente">&#10095;</button>
+          <div class="gal-dots" id="gal-dots"></div>
+        </div>
+        <div class="gal-thumbs" id="gal-thumbs"></div>
+      </div>
+
+      <div class="qv-panel-right">
+        <div class="qv-info" id="qv-info">
+          <div class="qv-tag" id="qv-tag"></div>
+          <h3 id="qv-title"></h3>
+
+          <div class="qv-ship-banner">
+            <span class="ico">🚚</span>
+            <div><b>Envío gratis a todo Chile</b><small>El despacho ya está incluido en el precio</small></div>
+          </div>
+
+          <div class="qv-desc" id="qv-desc"></div>
+          <button class="desc-toggle" id="desc-toggle" style="display:none;">Ver descripción completa</button>
+        </div>
+
+        <div class="qv-foot">
+          <div class="pack-selector" id="qv-pack-selector"></div>
+          <div class="card-price-line">
+            <span class="cp-total" id="qv-price"></span>
+            <span class="cp-note" id="qv-note"></span>
+          </div>
+          <a href="#" id="qv-buy" class="btn-wa" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.06 4c-4.86 0-8.82 3.94-8.82 8.8 0 1.55.41 3.06 1.19 4.4L3.2 21l3.9-1.02a8.83 8.83 0 0 0 4.94 1.5h.01c4.85 0 8.81-3.94 8.81-8.8a8.72 8.72 0 0 0-2.26-6.36ZM12.06 19.7a7.3 7.3 0 0 1-3.73-1.02l-.27-.16-2.78.73.74-2.7-.18-.28a7.32 7.32 0 0 1-1.12-3.9 7.35 7.35 0 0 1 7.35-7.34c1.96 0 3.8.77 5.18 2.15a7.29 7.29 0 0 1 2.15 5.19c0 4.05-3.3 7.33-7.34 7.33Zm4.02-5.5c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.17-.48.06-.22-.11-.93-.34-1.77-1.09-.65-.58-1.1-1.3-1.22-1.52-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.2-.68-1.65-.18-.43-.36-.37-.5-.38h-.43c-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.87 0 1.1.81 2.16.92 2.31.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.43-.06 1.3-.53 1.49-1.04.18-.51.18-.95.13-1.04-.06-.1-.2-.16-.42-.27Z"/></svg>
+            Pedir por WhatsApp
+          </a>
+          <div class="qv-payment-note" id="qv-payment-note"></div>
+          <a href="#" id="qv-mayor" class="qv-mayor" target="_blank" rel="noopener">
+            <b>¿Compras por mayor sobre 12 unidades?</b>
+            Cotiza directo con un asesor comercial para tarifas especiales de distribución.
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  import { CATEGORIES, CATEGORY_ICON, CATEGORY_LABEL, getProductsRealtimeMock } from './productsMockData.js';
+
+  // ---------------------------------------------------------------------
+  // CONFIGURACIÓN — AJUSTAR AQUÍ
+  // 'mock' -> productsMockData.js  |  'firebase' -> firebaseMedinaMedel.js
+  // ---------------------------------------------------------------------
+  const DATA_SOURCE = 'firebase';
+  const WHATSAPP_NUMBER = '56947553569';
+  const CONTACT_EMAIL = 'contacto@benjaminmedina.cl';
+  const PAGE_SIZE = 12; // cuántas tarjetas se muestran de entrada por categoría/búsqueda (el resto con "Ver más productos")
+  // ---------------------------------------------------------------------
+
+  let allProducts = [];
+  let productsById = {};
+  let activeCategory = 'all';
+  const selectedPack = {};
+  let searchTerm = '';
+  let visibleCount = PAGE_SIZE;
+
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  /* =====================================================================
+     PRECIOS EN PESOS CHILENOS
+     - normPrice() repara precios guardados con formato chileno mal leído
+       (ej: se tecleó "18.990" y quedó 18.99 -> se corrige a 18990).
+     - fmt() imprime siempre $18.990 (punto de miles, sin decimales).
+     ===================================================================== */
+  function normPrice(v) {
+    let n = Number(v);
+    if (!isFinite(n) || n <= 0) return 0;
+    if (!Number.isInteger(n)) n = Math.round(n * 1000); // 18.99 -> 18990
+    return Math.round(n);
+  }
+  function fmt(n) {
+    return '$' + normPrice(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  // Normaliza el producto que llega de Firebase/mock a una forma estable
+  function normalizeProduct(p) {
+    const photos = Array.isArray(p.photos) && p.photos.length
+      ? p.photos.filter(Boolean)
+      : (p.photo ? [p.photo] : []);
+
+    const src = p.packs || {};
+    const unit = normPrice(src.unit?.priceTotal);
+    const pack2 = normPrice(src.pack2?.priceTotal);
+    const pack6u = normPrice(src.pack6?.pricePerUnit || (src.pack6?.priceTotal ? src.pack6.priceTotal / 6 : 0));
+
+    return {
+      ...p,
+      photos,
+      packs: {
+        unit:  { qty: 1, label: '1 Unidad', priceTotal: unit, pricePerUnit: unit, badge: null, whatsappLabel: '1 und' },
+        pack2: { qty: 2, label: 'Pack x2 Unidades', priceTotal: pack2, pricePerUnit: Math.round(pack2 / 2), badge: 'Más Vendido', whatsappLabel: 'Pack 2x' },
+        pack6: { qty: 6, label: 'Media Docena (6 Unidades)', priceTotal: pack6u * 6, pricePerUnit: pack6u, badge: 'Mayorista', whatsappLabel: 'Pack 6x' },
+      },
+    };
+  }
+
+  function availablePacks(product) {
+    return ['unit', 'pack2', 'pack6'].filter(k => (product.packs[k]?.priceTotal || 0) > 0);
+  }
+  function defaultPack(product) {
+    const av = availablePacks(product);
+    return av.includes('pack2') ? 'pack2' : (av[0] || 'unit');
+  }
+
+  /* ===== Descripción larga: respeta saltos de línea y da formato ===== */
+  function renderDescription(text) {
+    const raw = String(text || '').replace(/\r\n/g, '\n');
+    if (!raw.trim()) return '<div class="d-p">Sin descripción.</div>';
+    return raw.split('\n').map(line => {
+      const t = line.trim();
+      if (!t) return '<div class="d-sp"></div>';
+      if (/^[✅✔☑]/u.test(t))               return `<div class="d-check">${esc(t.replace(/^[✅✔☑]\uFE0F?\s*/u, ''))}</div>`;
+      if (/^[•·▪\-–*]\s+/u.test(t))          return `<div class="d-bullet">${esc(t.replace(/^[•·▪\-–*]\s+/u, ''))}</div>`;
+      if (/:\s*$/.test(t) || /^[\p{Extended_Pictographic}]/u.test(t)) return `<div class="d-head">${esc(t)}</div>`;
+      return `<div class="d-p">${esc(t)}</div>`;
+    }).join('');
+  }
+  function excerpt(text) {
+    const first = String(text || '').split('\n').map(s => s.trim()).find(Boolean) || '';
+    return first.replace(/^[\p{Extended_Pictographic}\s✅✔☑•·\-–*]+/u, '');
+  }
+
+  /* Condición de pago: 1 unidad va contra entrega; los packs llevan abono
+     o pago completo antes del despacho. */
+  function paymentTerms(packKey) {
+    if (packKey === 'unit') {
+      return {
+        short: '💵 Pagas al recibir · efectivo o transferencia',
+        long: '💵 <b>Pago contra entrega:</b> pagas en efectivo o por transferencia al repartidor cuando recibes el paquete.',
+        wa: 'Entiendo que por ser 1 unidad el pago es contra entrega.',
+        advance: false,
+      };
+    }
+    return {
+      short: '💳 Pedido por pack: abono previo o pago completo antes del despacho',
+      long: '💳 <b>Pedidos por pack:</b> se coordina un abono previo o el pago completo antes del despacho (el pago contra entrega aplica solo a pedidos de 1 unidad).',
+      wa: 'Sé que por ser pedido por pack se coordina abono o pago completo antes del despacho.',
+      advance: true,
+    };
+  }
+
+  function buildWaMessage(product, packKey) {
+    const key = packKey || 'unit';
+    const pack = product.packs[key] || product.packs.unit;
+    const texto = `Hola Distribuidora Medina & Medel, me interesa pedir: ${product.name} - ${pack.whatsappLabel} por un total de ${fmt(pack.priceTotal)} (con envío gratis). ${paymentTerms(key).wa} ¿Qué datos necesitan para coordinar la entrega?`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
+  }
+
+  const mayoristaMsg = 'Hola Distribuidora Medina & Medel, compro por mayor (sobre 12 unidades) y quiero cotizar con un asesor comercial para tarifas especiales de distribución.';
+  const mayoristaUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mayoristaMsg)}`;
+
+  // ===== Enlaces genéricos =====
+  const genericWaMsg = 'Hola Distribuidora Medina & Medel, quiero más información sobre sus productos y el despacho a mi domicilio.';
+  const genericWaUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(genericWaMsg)}`;
+  document.getElementById('wa-float').href = genericWaUrl;
+  document.getElementById('footer-wa-link').href = genericWaUrl;
+  document.getElementById('nav-wa-cta').href = genericWaUrl;
+  document.getElementById('footer-email-link').href = `mailto:${CONTACT_EMAIL}`;
+  document.getElementById('mayor-cta').href = mayoristaUrl;
+  document.getElementById('qv-mayor').href = mayoristaUrl;
+
+  // ===== Nav scroll state =====
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+  }, { passive: true });
+
+  /* =====================================================================
+     SCROLL SUAVE Y LENTO (animado a mano, no el "salto" del navegador)
+     ===================================================================== */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+  function smoothScrollTo(targetY, duration = 1150) {
+    const startY = window.scrollY;
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    const endY = Math.max(0, Math.min(targetY, maxY));
+    const dist = endY - startY;
+    if (reduceMotion || Math.abs(dist) < 4) { window.scrollTo(0, endY); return; }
+    // Distancias largas duran un poco más, pero con tope
+    const dur = Math.min(1700, Math.max(750, duration * Math.min(1.6, Math.abs(dist) / 900)));
+    let start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      const p = Math.min(1, (ts - start) / dur);
+      window.scrollTo(0, startY + dist * easeInOutCubic(p));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function scrollToSection(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const navH = document.getElementById('navbar').offsetHeight + 56;
+    smoothScrollTo(target.getBoundingClientRect().top + window.scrollY - navH);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const id = link.getAttribute('href').slice(1);
+      if (!id || !document.getElementById(id)) return;
+      e.preventDefault();
+      scrollToSection(id);
+    });
+  });
+
+  // El logo/nombre de la marca en la barra siempre lleva al inicio
+  document.getElementById('brand-home').addEventListener('click', () => smoothScrollTo(0));
+
+  // ===== Categorías =====
+  function renderCategoryTiles() {
+    const wrap = document.getElementById('cat-tiles');
+    wrap.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c => `
+      <button class="tile cat-trigger" data-cat="${c.id}">
+        <div class="tile-ico">${CATEGORY_ICON[c.id] || '🛒'}</div>
+        <span class="tile-name">${esc(c.label)}</span>
+        <span class="tile-cta">Ver productos →</span>
+      </button>`).join('');
+    wrap.querySelectorAll('.cat-trigger').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setActiveCategory(btn.dataset.cat);
+        scrollToSection('catalogo');
+      });
+    });
+  }
+
+  function renderFilterPills() {
+    const wrap = document.getElementById('filter-pills');
+    wrap.innerHTML = CATEGORIES.map(c =>
+      `<button class="filter-pill ${c.id === activeCategory ? 'active' : ''}" data-cat="${c.id}">${esc(c.label)}</button>`).join('');
+    wrap.querySelectorAll('.filter-pill').forEach(btn => {
+      btn.addEventListener('click', () => setActiveCategory(btn.dataset.cat));
+    });
+  }
+
+  function setActiveCategory(cat) {
+    activeCategory = cat;
+    visibleCount = PAGE_SIZE;
+    renderFilterPills();
+    paintGrid();
+  }
+
+  // ===== Buscador =====
+  const searchInput = document.getElementById('search-input');
+  const searchWrap = document.getElementById('catalog-search');
+  const searchClear = document.getElementById('search-clear');
+  const normText = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  function matchesSearch(product, term) {
+    if (!term) return true;
+    const haystack = normText([product.name, product.sku, CATEGORY_LABEL[product.category], ...(product.tags || [])].join(' '));
+    return haystack.includes(term);
+  }
+
+  let searchDebounce = null;
+  searchInput.addEventListener('input', () => {
+    searchWrap.classList.toggle('has-text', !!searchInput.value);
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchTerm = normText(searchInput.value.trim());
+      visibleCount = PAGE_SIZE;
+      paintGrid();
+    }, 180);
+  });
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchWrap.classList.remove('has-text');
+    searchTerm = '';
+    visibleCount = PAGE_SIZE;
+    paintGrid();
+    searchInput.focus();
+  });
+
+  // ===== Packs =====
+  function packSelectorHTML(product) {
+    const av = availablePacks(product);
+    const current = selectedPack[product.id] || defaultPack(product);
+    return av.map(key => {
+      const pack = product.packs[key];
+      const isSel = key === current;
+      const badge = (key !== 'unit' && pack.badge) ? `<span class="po-badge">${esc(pack.badge)}</span>` : '';
+      const priceLabel = key === 'pack6' ? `${fmt(pack.pricePerUnit)} c/u` : fmt(pack.priceTotal);
+      return `<button type="button" class="pack-opt ${isSel ? 'selected' : ''}" data-id="${esc(product.id)}" data-pack="${key}">
+        ${badge}
+        <span class="po-label">${key === 'unit' ? '1 Und' : key === 'pack2' ? 'Pack x2' : 'Media Doc.'}</span>
+        <span class="po-price">${priceLabel}</span>
+      </button>`;
+    }).join('');
+  }
+
+  function priceLineHTML(product) {
+    const key = selectedPack[product.id] || defaultPack(product);
+    const pack = product.packs[key];
+    const note = key === 'unit'
+      ? 'Envío gratis incluido'
+      : key === 'pack2'
+        ? `${fmt(pack.pricePerUnit)} c/u · envío gratis`
+        : `Total ${fmt(pack.priceTotal)} · mayorista`;
+    return { total: key === 'pack6' ? fmt(pack.pricePerUnit) + ' c/u' : fmt(pack.priceTotal), note };
+  }
+
+  // ===== Tarjetas =====
+  const WA_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.06 4c-4.86 0-8.82 3.94-8.82 8.8 0 1.55.41 3.06 1.19 4.4L3.2 21l3.9-1.02a8.83 8.83 0 0 0 4.94 1.5h.01c4.85 0 8.81-3.94 8.81-8.8a8.72 8.72 0 0 0-2.26-6.36ZM12.06 19.7a7.3 7.3 0 0 1-3.73-1.02l-.27-.16-2.78.73.74-2.7-.18-.28a7.32 7.32 0 0 1-1.12-3.9 7.35 7.35 0 0 1 7.35-7.34c1.96 0 3.8.77 5.18 2.15a7.29 7.29 0 0 1 2.15 5.19c0 4.05-3.3 7.33-7.34 7.33Zm4.02-5.5c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.17-.48.06-.22-.11-.93-.34-1.77-1.09-.65-.58-1.1-1.3-1.22-1.52-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.2-.68-1.65-.18-.43-.36-.37-.5-.38h-.43c-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.87 0 1.1.81 2.16.92 2.31.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.43-.06 1.3-.53 1.49-1.04.18-.51.18-.95.13-1.04-.06-.1-.2-.16-.42-.27Z"/></svg>';
+
+  function cardHTML(product, index) {
+    const delay = Math.min(index, 10) * 0.05;
+    const { total, note } = priceLineHTML(product);
+    const payTerms = paymentTerms(selectedPack[product.id] || defaultPack(product));
+    const photos = product.photos || [];
+    const hasPhoto = photos.length > 0;
+    const media = hasPhoto
+      ? (index < 4
+          ? `<img src="${esc(photos[0])}" alt="${esc(product.name)}" loading="eager" fetchpriority="high" decoding="async">`
+          : `<img src="${esc(photos[0])}" alt="${esc(product.name)}" loading="lazy" decoding="async">`)
+      : `<span class="media-ico">${CATEGORY_ICON[product.category] || '🛒'}</span>`;
+    const counter = photos.length > 1
+      ? `<span class="photo-count">🖼️ ${photos.length}</span>` : '';
+    const ex = excerpt(product.description);
+
+    return `
+      <div class="card" data-id="${esc(product.id)}" style="animation-delay:${delay}s">
+        <div class="card-media ${hasPhoto ? '' : 'is-placeholder'}" data-qv="${esc(product.id)}">
+          ${media}
+          <span class="card-cat-tag">${esc(CATEGORY_LABEL[product.category] || '')}</span>
+          <span class="free-chip">Envío gratis</span>
+          ${counter}
+        </div>
+        <div class="card-body">
+          <h3 class="card-title" data-qv="${esc(product.id)}">${esc(product.name)}</h3>
+          ${ex ? `<p class="card-excerpt">${esc(ex)}</p>` : ''}
+          ${ex ? `<button class="card-more" data-qv="${esc(product.id)}">Ver detalles y fotos →</button>` : ''}
+          <div class="pack-selector" data-role="pack-selector">${packSelectorHTML(product)}</div>
+          <div class="card-price-line" data-role="price-line">
+            <span class="cp-total">${total}</span>
+            <span class="cp-note">${note}</span>
+          </div>
+          <span class="ship-line">🚚 Envío gratis a todo Chile</span>
+          <a href="${buildWaMessage(product, selectedPack[product.id] || defaultPack(product))}" class="btn-wa" data-role="wa-link" target="_blank" rel="noopener">
+            ${WA_SVG} Pedir por WhatsApp
+          </a>
+          <div class="btn-wa-sub ${payTerms.advance ? 'is-advance' : ''}" data-role="pay-note">${payTerms.short}</div>
+        </div>
+      </div>`;
+  }
+
+  function paintGrid() {
+    const grid = document.getElementById('catalog-grid');
+    const loadMoreWrap = document.getElementById('load-more-wrap');
+    const byCategory = activeCategory === 'all' ? allProducts : allProducts.filter(p => p.category === activeCategory);
+    const filtered = searchTerm ? byCategory.filter(p => matchesSearch(p, searchTerm)) : byCategory;
+
+    const countLabel = searchTerm
+      ? `<strong>${filtered.length}</strong> ${filtered.length === 1 ? 'resultado' : 'resultados'} para "${esc(searchInput.value.trim())}"`
+      : `<strong>${filtered.length}</strong> ${filtered.length === 1 ? 'producto encontrado' : 'productos encontrados'} · 🚚 todos con envío gratis`;
+    document.getElementById('results-count').innerHTML = countLabel;
+
+    productsById = {};
+    allProducts.forEach(p => productsById[p.id] = p);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>Sin resultados</h3><p>${searchTerm ? 'Prueba con otra palabra o revisa otra categoría.' : 'Prueba con otra categoría del catálogo.'}</p><button id="empty-clear">Ver todo el catálogo</button></div>`;
+      loadMoreWrap.style.display = 'none';
+      document.getElementById('empty-clear').addEventListener('click', () => {
+        searchInput.value = ''; searchWrap.classList.remove('has-text'); searchTerm = '';
+        setActiveCategory('all');
+      });
+      return;
+    }
+
+    const visible = filtered.slice(0, visibleCount);
+    grid.innerHTML = visible.map((p, i) => cardHTML(p, i)).join('');
+    attachCardEvents();
+
+    const remaining = filtered.length - visible.length;
+    if (remaining > 0) {
+      loadMoreWrap.style.display = 'block';
+      document.getElementById('load-more-hint').textContent = `Mostrando ${visible.length} de ${filtered.length}`;
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
+  }
+
+  document.getElementById('load-more-btn').addEventListener('click', () => {
+    visibleCount += PAGE_SIZE;
+    paintGrid();
+  });
+
+  function attachCardEvents() {
+    document.querySelectorAll('.card .pack-opt').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedPack[btn.dataset.id] = btn.dataset.pack;
+        updateCardPricing(btn.dataset.id);
+      });
+    });
+    document.querySelectorAll('[data-qv]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openQuickView(productsById[el.dataset.qv]);
+      });
+    });
+  }
+
+  function updateCardPricing(productId) {
+    const product = productsById[productId];
+    const card = document.querySelector(`.card[data-id="${CSS.escape(productId)}"]`);
+    if (!product || !card) return;
+
+    card.querySelector('[data-role="pack-selector"]').innerHTML = packSelectorHTML(product);
+    const { total, note } = priceLineHTML(product);
+    const priceLine = card.querySelector('[data-role="price-line"]');
+    priceLine.querySelector('.cp-total').textContent = total;
+    priceLine.querySelector('.cp-note').textContent = note;
+    card.querySelector('[data-role="wa-link"]').href = buildWaMessage(product, selectedPack[productId]);
+
+    const payTerms = paymentTerms(selectedPack[productId]);
+    const payEl = card.querySelector('[data-role="pay-note"]');
+    if (payEl) {
+      payEl.textContent = payTerms.short;
+      payEl.classList.toggle('is-advance', payTerms.advance);
+    }
+
+    card.querySelectorAll('.pack-opt').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedPack[btn.dataset.id] = btn.dataset.pack;
+        updateCardPricing(btn.dataset.id);
+      });
+    });
+  }
+
+  /* =====================================================================
+     GALERÍA DE FOTOS (estilo Marketplace: flechas, puntos, miniaturas,
+     deslizar con el dedo y teclado)
+     ===================================================================== */
+  const galTrack = document.getElementById('gal-track');
+  const galStage = document.getElementById('gal-stage');
+  const galDots = document.getElementById('gal-dots');
+  const galThumbs = document.getElementById('gal-thumbs');
+  const galCounter = document.getElementById('gal-counter');
+  let galPhotos = [];
+  let galIndex = 0;
+
+  function buildGallery(product) {
+    galPhotos = product.photos || [];
+    galIndex = 0;
+    const multi = galPhotos.length > 1;
+    galStage.classList.toggle('multi', multi);
+
+    if (!galPhotos.length) {
+      galTrack.innerHTML = `<div class="gal-slide"><span class="media-ico">${CATEGORY_ICON[product.category] || '🛒'}</span></div>`;
+      galTrack.style.transform = 'translateX(0)';
+      galDots.innerHTML = ''; galThumbs.innerHTML = ''; galCounter.textContent = '';
+      galThumbs.style.display = 'none';
+      return;
+    }
+
+    galTrack.innerHTML = galPhotos.map((src, i) =>
+      `<div class="gal-slide"><img src="${esc(src)}" alt="${esc(product.name)} — foto ${i + 1}" ${i === 0 ? '' : 'loading="lazy"'}></div>`).join('');
+    galDots.innerHTML = multi ? galPhotos.map((_, i) => `<span class="${i === 0 ? 'on' : ''}"></span>`).join('') : '';
+    galThumbs.style.display = multi ? 'flex' : 'none';
+    galThumbs.innerHTML = multi ? galPhotos.map((src, i) =>
+      `<button class="${i === 0 ? 'on' : ''}" data-i="${i}" aria-label="Foto ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join('') : '';
+    galThumbs.querySelectorAll('button').forEach(b => b.addEventListener('click', () => goTo(+b.dataset.i)));
+    goTo(0);
+  }
+
+  function goTo(i) {
+    if (!galPhotos.length) return;
+    galIndex = (i + galPhotos.length) % galPhotos.length;
+    galTrack.style.transform = `translateX(${-galIndex * 100}%)`;
+    galCounter.textContent = galPhotos.length > 1 ? `${galIndex + 1} / ${galPhotos.length}` : '';
+    galDots.querySelectorAll('span').forEach((d, k) => d.classList.toggle('on', k === galIndex));
+    galThumbs.querySelectorAll('button').forEach((b, k) => b.classList.toggle('on', k === galIndex));
+    const active = galThumbs.querySelector('button.on');
+    if (active) active.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  }
+
+  document.getElementById('gal-prev').addEventListener('click', (e) => { e.stopPropagation(); goTo(galIndex - 1); });
+  document.getElementById('gal-next').addEventListener('click', (e) => { e.stopPropagation(); goTo(galIndex + 1); });
+
+  // Deslizar con el dedo (iOS + Android)
+  let touchX = 0, touchY = 0, dragging = false, locked = null;
+  galStage.addEventListener('touchstart', (e) => {
+    if (galPhotos.length < 2) return;
+    touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    dragging = true; locked = null;
+    galTrack.classList.add('dragging');
+  }, { passive: true });
+
+  galStage.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const dx = e.touches[0].clientX - touchX;
+    const dy = e.touches[0].clientY - touchY;
+    if (locked === null) locked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    if (locked !== 'x') return;
+    const pct = (dx / galStage.offsetWidth) * 100;
+    galTrack.style.transform = `translateX(${-galIndex * 100 + pct}%)`;
+  }, { passive: true });
+
+  galStage.addEventListener('touchend', (e) => {
+    if (!dragging) return;
+    dragging = false;
+    galTrack.classList.remove('dragging');
+    const dx = (e.changedTouches[0].clientX - touchX);
+    if (locked === 'x' && Math.abs(dx) > galStage.offsetWidth * 0.18) goTo(galIndex + (dx < 0 ? 1 : -1));
+    else goTo(galIndex);
+  });
+
+  /* ===== Ficha de producto ===== */
+  const qvOverlay = document.getElementById('qv-overlay');
+  const descEl = document.getElementById('qv-desc');
+  const descToggle = document.getElementById('desc-toggle');
+  let qvCurrentId = null;
+  let scrollLockY = 0;
+
+  function openQuickView(product) {
+    if (!product) return;
+    qvCurrentId = product.id;
+    document.getElementById('qv-tag').textContent = CATEGORY_LABEL[product.category] || '';
+    document.getElementById('qv-title').textContent = product.name;
+
+    descEl.innerHTML = renderDescription(product.description);
+    descEl.classList.remove('clamped');
+    descToggle.style.display = 'none';
+
+    buildGallery(product);
+    renderQvPricing();
+
+    qvOverlay.classList.add('active');
+    scrollLockY = window.scrollY;
+    document.body.style.top = `-${scrollLockY}px`;
+    document.body.classList.add('no-scroll');
+
+    // Si la descripción es muy larga, se recorta con un "ver más"
+    requestAnimationFrame(() => {
+      qvScrollEl.scrollTop = 0;
+      if (descEl.scrollHeight > 240) {
+        descEl.classList.add('clamped');
+        descToggle.style.display = 'block';
+        descToggle.textContent = 'Ver descripción completa ▾';
+      }
+    });
+  }
+
+  // Contenedor único que ahora hace scroll de TODO el panel derecho
+  // (título, descripción, packs y botón de compra).
+  const qvScrollEl = document.querySelector('.qv-panel-right');
+
+  descToggle.addEventListener('click', () => {
+    const collapsed = descEl.classList.toggle('clamped');
+    descToggle.textContent = collapsed ? 'Ver descripción completa ▾' : 'Ver menos ▴';
+    if (collapsed) {
+      // al plegar, vuelve arriba para no quedar en un punto vacío
+      qvScrollEl.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    } else {
+      // al desplegar, deja visible el inicio de la descripción
+      requestAnimationFrame(() => {
+        const top = descEl.offsetTop - 12;
+        qvScrollEl.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    }
+  });
+
+  function renderQvPricing() {
+    const product = productsById[qvCurrentId];
+    if (!product) return;
+    document.getElementById('qv-pack-selector').innerHTML = packSelectorHTML(product);
+    const { total, note } = priceLineHTML(product);
+    document.getElementById('qv-price').textContent = total;
+    document.getElementById('qv-note').textContent = note;
+    const key = selectedPack[product.id] || defaultPack(product);
+    document.getElementById('qv-buy').href = buildWaMessage(product, key);
+
+    const terms = paymentTerms(key);
+    document.getElementById('qv-payment-note').innerHTML = '🚚 Envío gratis a todo Chile<br>' + terms.long;
+
+    document.querySelectorAll('#qv-pack-selector .pack-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedPack[btn.dataset.id] = btn.dataset.pack;
+        renderQvPricing();
+        updateCardPricing(btn.dataset.id);
+      });
+    });
+  }
+
+  function closeQuickView() {
+    qvOverlay.classList.remove('active');
+    document.body.classList.remove('no-scroll');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollLockY);
+  }
+  document.getElementById('qv-close').addEventListener('click', closeQuickView);
+  qvOverlay.addEventListener('click', (e) => { if (e.target === qvOverlay) closeQuickView(); });
+  document.addEventListener('keydown', (e) => {
+    if (!qvOverlay.classList.contains('active')) return;
+    if (e.key === 'Escape') closeQuickView();
+    if (e.key === 'ArrowRight') goTo(galIndex + 1);
+    if (e.key === 'ArrowLeft') goTo(galIndex - 1);
+  });
+
+  // ===== Carga de datos =====
+  let loadedOnce = false;
+  let slowTimer = null;
+
+  function onProductsLoaded(items) {
+    loadedOnce = true;
+    if (slowTimer) { clearTimeout(slowTimer); slowTimer = null; }
+    allProducts = items.map(normalizeProduct);
+    allProducts.forEach(p => { if (!selectedPack[p.id]) selectedPack[p.id] = defaultPack(p); });
+    paintGrid();
+  }
+
+  function showSkeletons() {
+    document.getElementById('catalog-grid').innerHTML =
+      Array.from({ length: 4 }).map(() => `<div class="skeleton"><div class="sk-media"></div><div class="sk-line" style="width:70%"></div><div class="sk-line" style="width:45%"></div></div>`).join('');
+  }
+
+  // Si a los 9 segundos aún no llegó ningún producto (por ejemplo, una VPN o
+  // red corporativa está bloqueando la conexión con Firebase), se avisa en
+  // vez de dejar el esqueleto de carga para siempre.
+  function armSlowConnectionNotice() {
+    slowTimer = setTimeout(() => {
+      if (loadedOnce) return;
+      document.getElementById('results-count').innerHTML =
+        `⏳ Esto está tardando más de lo normal. Si usas <b>VPN</b> o una red de trabajo, prueba desactivarla o cambiar de red — a veces bloquean la conexión con la base de datos.`;
+    }, 9000);
+  }
+
+  async function initDataSource() {
+    showSkeletons();
+    armSlowConnectionNotice();
+    try {
+      if (DATA_SOURCE === 'firebase') {
+        const { getProductsRealtimeFirebase } = await import('./firebaseMedinaMedel.js');
+        getProductsRealtimeFirebase(onProductsLoaded);
+      } else {
+        getProductsRealtimeMock(onProductsLoaded);
+      }
+    } catch (err) {
+      console.error('[catalogo] Error cargando productos:', err);
+      document.getElementById('catalog-grid').innerHTML =
+        `<div class="empty-state"><h3>No pudimos cargar el catálogo</h3><p>Revisa tu conexión e inténtalo nuevamente. Si usas VPN, intenta desactivarla.</p></div>`;
+    }
+  }
+
+  renderCategoryTiles();
+  renderFilterPills();
+  initDataSource();
+
+  // ===== Pantalla de carga inicial =====
+  // Al recargar (F5) el navegador a veces restaura el scroll antes de que
+  // termine de pintar todo, dejando la página "a medio camino". Se fuerza
+  // el inicio de nuevo aquí (además del script del <head>) y se muestra el
+  // splash con el logo por un segundo: eso tapa el salto y de paso da
+  // tiempo a que empiecen a llegar los productos desde Firebase.
+  window.scrollTo(0, 0);
+  const pageLoader = document.getElementById('page-loader');
+  const LOADER_MIN_MS = reduceMotion ? 0 : 950;
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    pageLoader.classList.add('hide');
+    document.body.classList.remove('is-loading');
+    setTimeout(() => pageLoader.remove(), 600);
+  }, LOADER_MIN_MS);
+
+  // Si el navegador restaura la página desde su caché (botón "atrás", por
+  // ejemplo), se asegura de nuevo que arranque arriba.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) window.scrollTo(0, 0);
+  });
+</script>
+</body>
+</html>

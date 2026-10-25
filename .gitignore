@@ -1,0 +1,23 @@
+# Sistema
+.DS_Store
+Thumbs.db
+__MACOSX/
+
+# Editores
+.vscode/
+.idea/
+
+# Secretos / entorno
+.env
+.env.*
+*.pem
+*.key
+serviceAccount*.json
+*-adminsdk-*.json
+.firebaserc
+.firebase/
+
+# Respaldos de datos
+*.xlsx
+*.xls
+*.csv

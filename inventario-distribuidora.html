@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1b2d">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+CjxyZWN0IHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgcng9JzE1JyBmaWxsPSd1cmwoI2cpJy8+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0nZycgeDE9JzAnIHkxPScwJyB4Mj0nNjQnIHkyPSc2NCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnPgo8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyNDUxZTAnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNDMwOWUnLz4KPC9saW5lYXJHcmFkaWVudD48L2RlZnM+Cjx0ZXh0IHg9JzMyJyB5PSc0MycgZm9udC1mYW1pbHk9J0FyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMjcnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyNmZmZmZmYnIHRleHQtYW5jaG9yPSdtaWRkbGUnPk1NPC90ZXh0Pgo8L3N2Zz4K">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+CjxyZWN0IHdpZHRoPSc2NCcgaGVpZ2h0PSc2NCcgcng9JzE1JyBmaWxsPSd1cmwoI2cpJy8+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0nZycgeDE9JzAnIHkxPScwJyB4Mj0nNjQnIHkyPSc2NCcgZ3JhZGllbnRVbml0cz0ndXNlclNwYWNlT25Vc2UnPgo8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyNDUxZTAnLz48c3RvcCBvZmZzZXQ9JzEnIHN0b3AtY29sb3I9JyMxNDMwOWUnLz4KPC9saW5lYXJHcmFkaWVudD48L2RlZnM+Cjx0ZXh0IHg9JzMyJyB5PSc0MycgZm9udC1mYW1pbHk9J0FyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMjcnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyNmZmZmZmYnIHRleHQtYW5jaG9yPSdtaWRkbGUnPk1NPC90ZXh0Pgo8L3N2Zz4K">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel Admin — Distribuidora Medina &amp; Medel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- Adelanta la conexión con Firebase/Firestore para que los productos empiecen a llegar antes -->
+<link rel="preconnect" href="https://firestore.googleapis.com">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com">
+<link rel="modulepreload" href="./productsMockData.js">
+<link rel="modulepreload" href="./firebaseMedinaMedel.js">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f1b2d; --bg:#f5f7fa; --card:#ffffff;
+    --brand:#1d4ed8; --brand-dark:#14309e; --brand-soft:#e8edfd;
+    --line:#e3e7ee; --muted:#667085; --danger:#c0392b; --ok:#0ea472; --warn:#f97316;
+    --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--navy);font-family:'Inter',sans-serif;-webkit-text-size-adjust:100%;}
+  h1,h2,h3{font-family:'Poppins',sans-serif;}
+  img{display:block;max-width:100%;}
+
+  /* LOGIN */
+  #login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+  .login-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px 24px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 24px rgba(15,27,45,0.08); }
+  .login-card h2 { font-size: 21px; margin: 0 0 6px; }
+  .login-card p { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .login-card .field { text-align: left; margin-bottom: 14px; }
+
+  /* APP */
+  #app-main { display: none; padding: calc(18px + var(--sat)) 14px calc(60px + var(--sab)); }
+  .wrap{max-width:860px;margin:0 auto;}
+  header{text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line);position:relative;}
+  header h1{font-size:23px;margin:0 0 4px;line-height:1.25;}
+  header p{margin:0;color:var(--muted);font-size:12px;letter-spacing:.03em;text-transform:uppercase;}
+  #btn-logout { margin-top:12px; background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 7px 14px; font-size: 11px; border-radius: 8px; }
+  @media(min-width:640px){ #btn-logout{ position:absolute; right:0; top:0; margin-top:0; } }
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 6px;text-align:center;}
+  .stat .num{display:block;font-family:'Poppins',sans-serif;font-size:19px;font-weight:700;color:var(--brand-dark);}
+  .stat .lbl{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:2px;}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;}
+  .panel h2{font-size:16px;margin:0 0 14px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:5px;font-weight:600;}
+  .field input, .field select, .field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font-family:'Inter',sans-serif;font-size:16px;background:#fbfcfe;color:var(--navy);}
+  .field textarea{resize:vertical;min-height:210px;line-height:1.6;font-size:14.5px;white-space:pre-wrap;}
+  .field input[type="checkbox"]{width:auto;margin-right:8px;transform:scale(1.25);}
+  .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--brand);outline-offset:1px;}
+  .field .money{font-variant-numeric:tabular-nums;font-weight:600;}
+
+  button{font-family:'Inter',sans-serif;font-weight:600;font-size:13px;border:none;border-radius:9px;padding:11px 16px;cursor:pointer;transition:opacity .2s, transform .15s;}
+  button:hover{opacity:.9;} button:active{transform:scale(.98);}
+  .btn-primary{background:var(--brand);color:#fff;width:100%;padding:13px;font-size:14px;}
+  .btn-row{display:flex;gap:8px;}
+  .btn-cancel{background:#eef1f6;color:var(--navy);flex:1;}
+  .btn-row .btn-primary{flex:2;}
+
+  .hint{font-size:11.5px;color:var(--muted);margin:-6px 0 14px;line-height:1.55;}
+  .hint b{color:var(--navy);}
+  .notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;line-height:1.55;border-radius:10px;padding:10px 12px;margin-bottom:14px;}
+  .notice.ok{background:#e2f7ee;border-color:#b9ecd8;color:#07714f;}
+
+  /* ===== Fotos múltiples ===== */
+  .photo-drop{border:2px dashed var(--line);border-radius:12px;padding:18px;text-align:center;background:#fbfcfe;cursor:pointer;transition:border-color .2s,background .2s;}
+  .photo-drop:hover{border-color:var(--brand);background:var(--brand-soft);}
+  .photo-drop .big{font-size:26px;} 
+  .photo-drop .t{font-size:13px;font-weight:600;margin-top:4px;}
+  .photo-drop .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:9px;margin-top:11px;}
+  .ph{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#f1f4f9;}
+  .ph img{width:100%;height:100%;object-fit:cover;}
+  .ph .cover{position:absolute;top:4px;left:4px;background:var(--brand);color:#fff;font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.03em;}
+  .ph .ctrl{position:absolute;bottom:0;left:0;right:0;display:flex;background:rgba(15,27,45,.72);}
+  .ph .ctrl button{flex:1;background:none;color:#fff;border:none;padding:5px 0;font-size:11px;border-radius:0;}
+  .ph .ctrl button.x{color:#ffb4a8;}
+  .size-meter{margin-top:9px;font-size:11px;color:var(--muted);}
+  .size-meter .bar{height:5px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px;}
+  .size-meter .bar i{display:block;height:100%;background:var(--ok);transition:width .3s ease;}
+  .size-meter.warn .bar i{background:var(--warn);} .size-meter.over .bar i{background:var(--danger);}
+  .size-meter.over{color:var(--danger);font-weight:600;}
+
+  /* ===== Lista ===== */
+  .tabs{display:flex;gap:8px;margin-bottom:12px;}
+  .tab{flex:1;text-align:center;padding:10px;border-radius:9px;background:var(--brand-soft);color:var(--brand-dark);font-size:13px;font-weight:600;cursor:pointer;}
+  .tab.active{background:var(--brand);color:#fff;}
+  .search-box{width:100%;padding:11px 14px;margin-bottom:12px;border-radius:9px;border:1px solid var(--brand);font-size:16px;}
+  .list-container{max-height:620px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px;}
+
+  .item{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .item:last-child{border-bottom:none;}
+  .item-photo{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--line);background:var(--brand-soft);}
+  .item-photo-placeholder{width:64px;height:64px;border-radius:10px;border:1px dashed var(--line);background:var(--brand-soft);display:flex;align-items:center;justify-content:center;font-size:24px;}
+  .ph-wrap{position:relative;width:64px;}
+  .ph-wrap .n{position:absolute;bottom:3px;right:3px;background:rgba(15,27,45,.75);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;}
+  .item-info{min-width:0;}
+  .item-name{font-weight:600;font-size:14px;line-height:1.35;display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+  .item-name .txt{flex:0 1 auto;min-width:0;overflow-wrap:anywhere;}
+  .item-desc{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+  .item-money{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .chip{font-size:11px;font-weight:600;background:#f1f4f9;color:var(--navy);border:1px solid var(--line);padding:3px 8px;border-radius:7px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .chip b{color:var(--muted);font-weight:600;margin-right:3px;}
+  .badge-cat{background:var(--brand);color:#fff;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+  .badge-hidden{background:#94a3b8;color:#fff;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;}
+  .badge-fix{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;}
+  .badge-sku{background:var(--navy);color:#fff;padding:2px 7px;border-radius:5px;font-size:9.5px;font-family:ui-monospace,monospace;}
+  .item-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+  .btn-small{background:#475569;color:#fff;padding:7px 12px;font-size:11.5px;white-space:nowrap;border-radius:7px;}
+  .btn-small.edit{background:var(--brand);} .btn-small.toggle{background:var(--warn);} .btn-small.del{background:var(--danger);}
+  .empty{text-align:center;color:var(--muted);font-size:13px;padding:26px 0;}
+
+  @media (max-width:420px){
+    .grid2, .grid3{grid-template-columns:1fr;}
+    .item{grid-template-columns:52px 1fr;gap:10px;}
+    .item-photo,.item-photo-placeholder,.ph-wrap{width:52px;} .item-photo,.item-photo-placeholder{height:52px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <h2>🔒 Panel Privado</h2>
+    <p>Inicia sesión para administrar el catálogo de la distribuidora</p>
+    <div class="field">
+      <label>Correo Electrónico</label>
+      <input type="email" id="login-email" autocomplete="username" placeholder="tucorreo@ejemplo.com">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" autocomplete="current-password" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" id="btn-login">Ingresar al Panel</button>
+    <div id="login-error" style="color:var(--danger);font-size:12px;margin-top:12px;display:none;">Credenciales incorrectas o usuario no habilitado. Revisa el correo/contraseña.</div>
+  </div>
+</div>
+
+<div id="app-main">
+  <div class="wrap">
+    <header>
+      <h1>Productos — Distribuidora Medina &amp; Medel</h1>
+      <p>Panel de Administración Privado</p>
+      <button id="btn-logout">Cerrar Sesión</button>
+    </header>
+
+    <div class="stats" id="stats"></div>
+    <div id="repair-notice"></div>
+
+    <div class="panel">
+      <h2 id="form-title">Agregar producto nuevo</h2>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Código (SKU)</label>
+          <input type="text" id="f-sku" placeholder="Ej: MM-HOG-011" style="text-transform:uppercase;">
+        </div>
+        <div class="field">
+          <label>Categoría</label>
+          <select id="f-cat"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Nombre del Producto</label>
+        <input type="text" id="f-name" placeholder="Ej: Compresor de Aire Portátil Air Bolt 12V">
+      </div>
+
+      <div class="field">
+        <label>Descripción completa</label>
+        <textarea id="f-desc" placeholder="Compresor de Aire Portátil Air Bolt 12V Original 🚗💨&#10;El conocido inflador de alta presión tipo pistola para emergencias en ruta.&#10;&#10;✅ Presión potente para neumáticos de autos, camionetas, motos y bicicletas.&#10;✅ Manómetro análogo incorporado.&#10;&#10;💰 LISTA DE PRECIOS MEDINA &amp; MEDEL:&#10;• 1 unidad: $18.990&#10;• PACK 2 UNIDADES: $32.990"></textarea>
+        <div class="hint" id="desc-count">
+          Los <b>saltos de línea se respetan</b> en el catálogo. Las líneas que empiezan con <b>✅</b> se ven como lista con check, las que empiezan con <b>•</b> o <b>-</b> como viñetas, y las que empiezan con un emoji o terminan en <b>:</b> como subtítulo.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>📸 Fotos del producto (hasta 6, tipo Marketplace)</label>
+        <div class="photo-drop" id="photo-drop">
+          <div class="big">🖼️</div>
+          <div class="t">Toca para agregar fotos</div>
+          <div class="s">Puedes seleccionar varias a la vez. La primera es la portada.</div>
+        </div>
+        <input type="file" id="f-photos" accept="image/*" multiple hidden>
+        <div class="photo-grid" id="photo-grid"></div>
+        <div class="size-meter" id="size-meter" style="display:none;">
+          <span id="size-text"></span>
+          <div class="bar"><i id="size-bar" style="width:0%"></i></div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="field">
+          <label>1 Unidad (CLP)</label>
+          <input type="text" inputmode="numeric" class="money" id="f-price-unit" placeholder="$18.990">
+        </div>
+        <div class="field">
+          <label>Pack x2 — Total (CLP)</label>
+          <input type="text" inputmode="numeric" class="money" id="f-price-pack2" placeholder="$32.990">
+        </div>
+        <div class="field">
+          <label>Media Docena — c/u (CLP)</label>
+          <input type="text" inputmode="numeric" class="money" id="f-price-pack6" placeholder="$13.990">
+        </div>
+      </div>
+      <div class="hint">
+        Escribe el precio como quieras (<b>18990</b>, <b>18.990</b> o <b>$18.990</b>): se guarda siempre en pesos enteros.
+        El de "Media Docena" es <b>por unidad</b> (el total x6 se calcula solo); el de "Pack x2" es el <b>total</b> del pack.
+        <span id="price-echo"></span>
+      </div>
+
+      <div class="field" style="background:var(--brand-soft);padding:11px;border-radius:9px;margin-bottom:15px;display:flex;align-items:center;">
+        <input type="checkbox" id="f-visible" checked>
+        <label for="f-visible" style="margin:0;color:var(--navy);font-size:13px;font-weight:600;text-transform:none;letter-spacing:0;">Hacer visible en el catálogo online</label>
+      </div>
+
+      <div class="btn-row" id="form-buttons">
+        <button class="btn-primary" id="btn-add">Guardar producto</button>
+      </div>
+      <div id="save-msg" style="font-size:12px;margin-top:10px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" data-tab="visibles">Visibles</div>
+        <div class="tab" data-tab="ocultos">Ocultos</div>
+      </div>
+      <input type="text" id="search-input" class="search-box" placeholder="🔍 Buscar por código, nombre o categoría...">
+      <div id="list-visibles" class="list-container"></div>
+      <div id="list-ocultos" class="list-container" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { CATEGORIES, CATEGORY_LABEL, CATEGORY_ICON } from './productsMockData.js';
+import {
+  getAllProductsRealtimeFirebase, saveProductFirebase, deleteProductFirebase,
+  watchAuthState, loginWithEmail, logout,
+} from './firebaseMedinaMedel.js';
+
+/* =====================================================================
+   PRECIOS EN CLP
+   parsePrice: acepta "18990", "18.990", "$18.990", "18 990" -> 18990
+   normPrice : repara valores antiguos mal guardados (18.99 -> 18990)
+   fmt       : imprime $18.990
+   ===================================================================== */
+function parsePrice(str) {
+  const digits = String(str == null ? '' : str).replace(/[^\d]/g, '');
+  return digits ? parseInt(digits, 10) : 0;
+}
+function normPrice(v) {
+  let n = Number(v);
+  if (!isFinite(n) || n <= 0) return 0;
+  if (!Number.isInteger(n)) n = Math.round(n * 1000);
+  return Math.round(n);
+}
+function fmt(n) {
+  return '$' + normPrice(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+function buildPacksCLP({ unit, pack2, pack6Unit }) {
+  const u = normPrice(unit), p2 = normPrice(pack2), p6 = normPrice(pack6Unit);
+  return {
+    unit:  { qty:1, label:'1 Unidad', priceTotal:u, pricePerUnit:u, badge:null, whatsappLabel:'1 und' },
+    pack2: { qty:2, label:'Pack x2 Unidades', priceTotal:p2, pricePerUnit:Math.round(p2/2), badge:'Más Vendido', whatsappLabel:'Pack 2x' },
+    pack6: { qty:6, label:'Media Docena (6 Unidades)', priceTotal:p6*6, pricePerUnit:p6, badge:'Mayorista', whatsappLabel:'Pack 6x' },
+  };
+}
+const esc = (s) => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+let items = [];
+let editingId = null;
+let pendingPhotos = [];      // array de dataURL
+let unsubscribeSnapshot = null;
+
+const MAX_PHOTOS = 6;
+const SIZE_LIMIT = 900 * 1024;   // margen bajo el límite de 1 MB por documento de Firestore
+
+// Categorías
+document.getElementById('f-cat').innerHTML =
+  CATEGORIES.filter(c => c.id !== 'all').map(c => `<option value="${c.id}">${esc(c.label)}</option>`).join('');
+
+/* ===== Autenticación ===== */
+watchAuthState((user) => {
+  if (user) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-main').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app-main').style.display = 'none';
+    if (unsubscribeSnapshot) unsubscribeSnapshot();
+  }
+});
+
+document.getElementById('btn-login').onclick = async () => {
+  const btn = document.getElementById('btn-login');
+  btn.textContent = 'Verificando...';
+  try {
+    await loginWithEmail(document.getElementById('login-email').value, document.getElementById('login-pass').value);
+    document.getElementById('login-error').style.display = 'none';
+  } catch { document.getElementById('login-error').style.display = 'block'; }
+  finally { btn.textContent = 'Ingresar al Panel'; }
+};
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-login').click(); });
+document.getElementById('btn-logout').onclick = () => logout();
+
+/* ===== Datos ===== */
+let loadedOnce = false;
+function loadData() {
+  loadedOnce = false;
+  document.getElementById('repair-notice').innerHTML =
+    `<div class="notice">⏳ Cargando productos desde Firebase…</div>`;
+  const slowTimer = setTimeout(() => {
+    if (loadedOnce) return;
+    document.getElementById('repair-notice').innerHTML =
+      `<div class="notice">⏳ Esto está tardando más de lo normal. Si usas <b>VPN</b> o una red de trabajo/colegio, prueba desactivarla o cambiar de red — a veces bloquean la conexión con la base de datos.</div>`;
+  }, 9000);
+  unsubscribeSnapshot = getAllProductsRealtimeFirebase((data) => {
+    loadedOnce = true;
+    clearTimeout(slowTimer);
+    items = data;
+    render();
+  });
+}
+function photosOf(p) {
+  if (Array.isArray(p.photos) && p.photos.length) return p.photos.filter(Boolean);
+  return p.photo ? [p.photo] : [];
+}
+function needsPriceRepair(p) {
+  const vals = [p.packs?.unit?.priceTotal, p.packs?.pack2?.priceTotal, p.packs?.pack6?.pricePerUnit];
+  return vals.some(v => typeof v === 'number' && v > 0 && !Number.isInteger(v));
+}
+
+function render() { renderStats(); renderRepairNotice(); renderList(); }
+
+function renderStats() {
+  const total = items.length;
+  const visibles = items.filter(i => i.isVisible !== false).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><span class="num">${total}</span><span class="lbl">Total</span></div>
+    <div class="stat"><span class="num">${visibles}</span><span class="lbl">Visibles</span></div>
+    <div class="stat"><span class="num">${total - visibles}</span><span class="lbl">Ocultos</span></div>`;
+}
+
+function renderRepairNotice() {
+  const broken = items.filter(needsPriceRepair);
+  const box = document.getElementById('repair-notice');
+  if (!broken.length) { box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="notice">
+    ⚠️ <b>${broken.length} producto(s) con precios guardados en formato antiguo</b> (por ejemplo 18.99 en vez de 18.990).
+    Abajo se muestran ya corregidos, pero para dejarlo fijo en la base de datos pulsa este botón.
+    <div style="margin-top:9px;"><button class="btn-small edit" id="btn-repair">Corregir y guardar ${broken.length} precio(s)</button></div>
+  </div>`;
+  document.getElementById('btn-repair').onclick = async () => {
+    const b = document.getElementById('btn-repair'); b.textContent = 'Corrigiendo…'; b.disabled = true;
+    for (const p of broken) {
+      await saveProductFirebase({
+        ...p,
+        packs: buildPacksCLP({
+          unit: p.packs?.unit?.priceTotal,
+          pack2: p.packs?.pack2?.priceTotal,
+          pack6Unit: p.packs?.pack6?.pricePerUnit,
+        }),
+      });
+    }
+  };
+}
+
+function priceChips(p) {
+  const u = normPrice(p.packs?.unit?.priceTotal);
+  const p2 = normPrice(p.packs?.pack2?.priceTotal);
+  const p6 = normPrice(p.packs?.pack6?.pricePerUnit);
+  const out = [];
+  if (u)  out.push(`<span class="chip"><b>1u</b>${fmt(u)}</span>`);
+  if (p2) out.push(`<span class="chip"><b>x2</b>${fmt(p2)}</span>`);
+  if (p6) out.push(`<span class="chip"><b>x6</b>${fmt(p6)} c/u</span>`);
+  return out.length ? out.join('') : '<span class="chip">Sin precios</span>';
+}
+
+function renderList() {
+  const build = (list) => list.length ? list.map(i => {
+    const photos = photosOf(i);
+    const catLabel = CATEGORY_LABEL[i.category] || i.category || '';
+    const photoTag = photos.length
+      ? `<div class="ph-wrap"><img class="item-photo" src="${esc(photos[0])}" alt="">${photos.length > 1 ? `<span class="n">${photos.length}</span>` : ''}</div>`
+      : `<div class="ph-wrap"><div class="item-photo-placeholder">${CATEGORY_ICON[i.category] || '🛒'}</div></div>`;
+    const descOneLine = String(i.description || '').replace(/\s*\n+\s*/g, ' · ').trim();
+    return `
+      <div class="item" data-search="${esc((i.sku||'') + ' ' + (i.name||'') + ' ' + catLabel).toLowerCase()}">
+        ${photoTag}
+        <div class="item-info">
+          <div class="item-name">
+            ${i.sku ? `<span class="badge-sku">${esc(i.sku)}</span>` : ''}
+            <span class="txt">${esc(i.name || 'Sin nombre')}</span>
+            <span class="badge-cat">${esc(catLabel)}</span>
+            ${i.isVisible === false ? '<span class="badge-hidden">Oculto</span>' : ''}
+            ${needsPriceRepair(i) ? '<span class="badge-fix">Precio por corregir</span>' : ''}
+          </div>
+          <div class="item-desc">${esc(descOneLine || 'Sin descripción')}</div>
+          <div class="item-money">${priceChips(i)}</div>
+          <div class="item-actions">
+            <button class="btn-small edit" data-edit="${esc(i.id)}">Editar</button>
+            <button class="btn-small toggle" data-toggle="${esc(i.id)}">${i.isVisible === false ? 'Mostrar' : 'Ocultar'}</button>
+            <button class="btn-small del" data-del="${esc(i.id)}">Eliminar</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('') : '<div class="empty">No hay productos en esta lista.</div>';
+
+  document.getElementById('list-visibles').innerHTML = build(items.filter(i => i.isVisible !== false));
+  document.getElementById('list-ocultos').innerHTML  = build(items.filter(i => i.isVisible === false));
+  attachRowEvents();
+  filterList();
+}
+
+function filterList() {
+  const term = document.getElementById('search-input').value.toLowerCase().trim();
+  document.querySelectorAll('.item').forEach(el => {
+    el.style.display = !term || (el.dataset.search || '').includes(term) ? 'grid' : 'none';
+  });
+}
+document.getElementById('search-input').addEventListener('input', filterList);
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('list-visibles').style.display = tab.dataset.tab === 'visibles' ? 'block' : 'none';
+    document.getElementById('list-ocultos').style.display  = tab.dataset.tab === 'ocultos'  ? 'block' : 'none';
+  });
+});
+
+function attachRowEvents() {
+  document.querySelectorAll('[data-toggle]').forEach(b => {
+    b.onclick = () => {
+      const item = items.find(i => i.id === b.dataset.toggle);
+      if (item) saveProductFirebase({ ...item, isVisible: item.isVisible === false });
+    };
+  });
+  document.querySelectorAll('[data-del]').forEach(b => {
+    b.onclick = () => { if (confirm('¿Eliminar este producto para siempre?')) deleteProductFirebase(b.dataset.del); };
+  });
+  document.querySelectorAll('[data-edit]').forEach(b => { b.onclick = () => startEdit(b.dataset.edit); });
+}
+
+/* =====================================================================
+   FOTOS: varias por producto, comprimidas en el navegador
+   ===================================================================== */
+function compressImage(file, maxSide = 1100) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxSide) { h = Math.round(h * maxSide / w); w = maxSide; } }
+        else       { if (h > maxSide) { w = Math.round(w * maxSide / h); h = maxSide; } }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);   // fondo blanco para PNG con transparencia
+        ctx.drawImage(img, 0, 0, w, h);
+        // Baja la calidad hasta que la foto pese poco (Firestore limita 1 MB por producto)
+        let out = canvas.toDataURL('image/jpeg', 0.78);
+        for (const q of [0.66, 0.55, 0.45, 0.35]) {
+          if (out.length <= 190 * 1024) break;
+          out = canvas.toDataURL('image/jpeg', q);
+        }
+        resolve(out);
+      };
+      img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
+const photoInput = document.getElementById('f-photos');
+document.getElementById('photo-drop').addEventListener('click', () => photoInput.click());
+
+photoInput.addEventListener('change', async (e) => {
+  const files = Array.from(e.target.files || []);
+  if (!files.length) return;
+  const drop = document.getElementById('photo-drop');
+  const prev = drop.innerHTML;
+  drop.innerHTML = '<div class="t">Procesando fotos…</div>';
+  for (const file of files) {
+    if (pendingPhotos.length >= MAX_PHOTOS) { alert(`Máximo ${MAX_PHOTOS} fotos por producto.`); break; }
+    if (!file.type.startsWith('image/')) continue;
+    try { pendingPhotos.push(await compressImage(file)); } catch (err) { console.error(err); }
+  }
+  drop.innerHTML = prev;
+  photoInput.value = '';
+  renderPhotoGrid();
+});
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('photo-grid');
+  grid.innerHTML = pendingPhotos.map((src, i) => `
+    <div class="ph">
+      <img src="${esc(src)}" alt="">
+      ${i === 0 ? '<span class="cover">Portada</span>' : ''}
+      <div class="ctrl">
+        <button data-mv="${i}" data-dir="-1" title="Mover antes"${i === 0 ? ' disabled style="opacity:.3"' : ''}>◀</button>
+        <button data-mv="${i}" data-dir="1" title="Mover después"${i === pendingPhotos.length - 1 ? ' disabled style="opacity:.3"' : ''}>▶</button>
+        <button class="x" data-rm="${i}" title="Quitar">✕</button>
+      </div>
+    </div>`).join('');
+
+  grid.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => {
+    pendingPhotos.splice(+b.dataset.rm, 1); renderPhotoGrid();
+  });
+  grid.querySelectorAll('[data-mv]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.mv, j = i + (+b.dataset.dir);
+    if (j < 0 || j >= pendingPhotos.length) return;
+    [pendingPhotos[i], pendingPhotos[j]] = [pendingPhotos[j], pendingPhotos[i]];
+    renderPhotoGrid();
+  });
+  updateSizeMeter();
+}
+
+function photosBytes() { return pendingPhotos.reduce((a, s) => a + s.length, 0); }
+
+function updateSizeMeter() {
+  const meter = document.getElementById('size-meter');
+  if (!pendingPhotos.length) { meter.style.display = 'none'; return; }
+  const bytes = photosBytes();
+  const pct = Math.min(100, Math.round(bytes / SIZE_LIMIT * 100));
+  meter.style.display = 'block';
+  meter.classList.toggle('warn', pct >= 70 && pct < 100);
+  meter.classList.toggle('over', pct >= 100);
+  document.getElementById('size-text').textContent =
+    `${pendingPhotos.length} foto(s) · ${Math.round(bytes / 1024)} KB de ${Math.round(SIZE_LIMIT / 1024)} KB` +
+    (pct >= 100 ? ' — demasiado pesado, quita una foto' : '');
+  document.getElementById('size-bar').style.width = pct + '%';
+}
+
+/* ===== Vista previa de precios mientras se escribe ===== */
+['f-price-unit', 'f-price-pack2', 'f-price-pack6'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    const v = parsePrice(el.value);
+    el.value = v ? fmt(v) : '';
+    el.setSelectionRange?.(el.value.length, el.value.length);
+    echoPrices();
+  });
+});
+function echoPrices() {
+  const p6 = parsePrice(document.getElementById('f-price-pack6').value);
+  document.getElementById('price-echo').innerHTML = p6
+    ? `<br>Media docena: <b>${fmt(p6)} c/u → total ${fmt(p6 * 6)}</b>.` : '';
+}
+
+/* ===== Formulario ===== */
+function readForm() {
+  return {
+    sku: document.getElementById('f-sku').value.trim().toUpperCase(),
+    name: document.getElementById('f-name').value.trim(),
+    description: document.getElementById('f-desc').value.replace(/\r\n/g, '\n').trim(),
+    category: document.getElementById('f-cat').value,
+    isVisible: document.getElementById('f-visible').checked,
+    photos: pendingPhotos.slice(),
+    photo: pendingPhotos[0] || '',   // compatibilidad con la versión anterior
+    packs: buildPacksCLP({
+      unit: parsePrice(document.getElementById('f-price-unit').value),
+      pack2: parsePrice(document.getElementById('f-price-pack2').value),
+      pack6Unit: parsePrice(document.getElementById('f-price-pack6').value),
+    }),
+  };
+}
+
+function msg(text, ok = true) {
+  const el = document.getElementById('save-msg');
+  el.textContent = text;
+  el.style.color = ok ? 'var(--ok)' : 'var(--danger)';
+  if (text) setTimeout(() => { el.textContent = ''; }, 4000);
+}
+
+function validate(data) {
+  if (!data.name) return 'Ponle un nombre al producto.';
+  if (!data.packs.unit.priceTotal) return 'Falta el precio de 1 unidad.';
+  if (photosBytes() > SIZE_LIMIT) return 'Las fotos pesan demasiado juntas. Quita una o usa imágenes más livianas.';
+  return null;
+}
+
+async function addItem() {
+  const data = readForm();
+  const err = validate(data);
+  if (err) return msg(err, false);
+  const btn = document.getElementById('btn-add'); btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    await saveProductFirebase({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), ...data });
+    resetForm(); msg('✅ Producto guardado y publicado.');
+  } catch (e) {
+    console.error(e); msg('No se pudo guardar: ' + e.message, false);
+    btn.disabled = false; btn.textContent = 'Guardar producto';
+  }
+}
+document.getElementById('btn-add').onclick = addItem;
+
+function startEdit(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  editingId = id;
+  document.getElementById('form-title').textContent = 'Editando producto';
+  document.getElementById('f-sku').value = item.sku || '';
+  document.getElementById('f-cat').value = item.category || 'hogar';
+  document.getElementById('f-name').value = item.name || '';
+  document.getElementById('f-desc').value = item.description || '';
+  const u = normPrice(item.packs?.unit?.priceTotal);
+  const p2 = normPrice(item.packs?.pack2?.priceTotal);
+  const p6 = normPrice(item.packs?.pack6?.pricePerUnit);
+  document.getElementById('f-price-unit').value  = u ? fmt(u) : '';
+  document.getElementById('f-price-pack2').value = p2 ? fmt(p2) : '';
+  document.getElementById('f-price-pack6').value = p6 ? fmt(p6) : '';
+  document.getElementById('f-visible').checked = item.isVisible !== false;
+  pendingPhotos = photosOf(item).slice(0, MAX_PHOTOS);
+  renderPhotoGrid();
+  echoPrices();
+
+  document.getElementById('form-buttons').innerHTML = `
+    <button class="btn-cancel" id="btn-cancel-edit">Cancelar</button>
+    <button class="btn-primary" id="btn-save-edit">Guardar cambios</button>`;
+  document.getElementById('btn-cancel-edit').onclick = resetForm;
+  document.getElementById('btn-save-edit').onclick = saveEdit;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function saveEdit() {
+  const data = readForm();
+  const err = validate(data);
+  if (err) return msg(err, false);
+  const btn = document.getElementById('btn-save-edit'); btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    await saveProductFirebase({ id: editingId, ...data });
+    resetForm(); msg('✅ Cambios guardados.');
+  } catch (e) {
+    console.error(e); msg('No se pudo guardar: ' + e.message, false);
+    btn.disabled = false; btn.textContent = 'Guardar cambios';
+  }
+}
+
+function resetForm() {
+  editingId = null;
+  document.getElementById('form-title').textContent = 'Agregar producto nuevo';
+  ['f-sku','f-name','f-desc','f-price-unit','f-price-pack2','f-price-pack6'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-cat').value = 'hogar';
+  document.getElementById('f-visible').checked = true;
+  pendingPhotos = [];
+  renderPhotoGrid();
+  echoPrices();
+  document.getElementById('form-buttons').innerHTML = `<button class="btn-primary" id="btn-add">Guardar producto</button>`;
+  document.getElementById('btn-add').onclick = addItem;
+}
+</script>
+</body>
+</html>
